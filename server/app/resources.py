@@ -11,20 +11,26 @@ START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
 '''
 # parser for getting homepage data
 home_data_parser = reqparse.RequestParser()
-home_data_parser.add_argument('user', help = 'This field cannot be blank', required = True)
+home_data_parser.add_argument('email', help = 'This field cannot be blank', required = True)
 
 # parser for adding a new report
 report_parser = reqparse.RequestParser()
 report_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('buildings', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('symptoms', help = 'This field cannot be blank', required = True)
-report_parser.add_argument('user', help = 'This field cannot be blank', required = True)
+report_parser.add_argument('email', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('date', help = 'This field cannot be blank', required = True)
 
 # parser for authenticating
 auth_parser = reqparse.RequestParser()
-auth_parser.add_argument('username', help = 'This field cannot be blank', required = True)
+auth_parser.add_argument('email', help = 'This field cannot be blank', required = True)
 auth_parser.add_argument('password', help = 'This field cannot be blank', required = True)
+
+# parser for registration
+registration_parser = reqparse.RequestParser()
+registration_parser.add_argument('name', help = 'This field cannot be blank', required = True)
+registration_parser.add_argument('email', help = 'This field cannot be blank', required = True)
+registration_parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 # parser for adding building
 building_parser = reqparse.RequestParser()
@@ -112,13 +118,13 @@ class SubmitReport(Resource):
         # grabbing all raw data from request
         severity = data['severity']
         date = data['date'] # expected format for date: MM/DD/YYYY
-        user = data['user']
+        email = data['email']
         symptoms = data['symptoms']
         buildings = data['buildings']
         symptoms = symptoms.split(",")
         buildings = buildings.split(",")
         # converting raw data into variables to instantiate Report
-        user = User.query.filter_by(username=user).first()
+        user = User.query.filter_by(email=email).first()
         if not user:
             return {
                 'message': 'Requested user for report not found in database.',
@@ -161,7 +167,7 @@ class SubmitReport(Resource):
 class HotspotSymptomsData(Resource):
     def get(self):
         home_data_parser.parse_args()
-        user = User.query.filter_by(username=data['user']).first()
+        user = User.query.filter_by(email=data['email']).first()
         if not user:
             return {
                 'message': 'Failed to get data for incorrect user.',
@@ -203,10 +209,10 @@ START OF SECTION FOR
 '''
 class UserRegistration(Resource):
     def post(self):
-        data = auth_parser.parse_args()
-        new_user = User(username = data['email'], password = User.generate_hash(data['password']))
+        data = registration_parser.parse_args()
+        new_user = User(name = data['name'], email = data['email'], password = User.generate_hash(data['password']))
 
-        if User.find_by_username(data['email']):
+        if User.find_by_email(data['email']):
             return {
                 'message': 'User {} already exists'. format(data['email']),
                 'status': False
@@ -216,7 +222,7 @@ class UserRegistration(Resource):
             access_token = create_access_token(identity = data['email'])
             refresh_token = create_refresh_token(identity = data['email'])
             return {
-                'message': 'User has been registered: {}'.format(new_user.username),
+                'message': 'User has been registered: {}'.format(new_user.email),
                 'access_token': access_token,
                 'refresh_token': refresh_token,
                 'status': True
@@ -231,7 +237,7 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
     def post(self):
         data = auth_parser.parse_args()
-        current_user = User.find_by_username(data['email'])
+        current_user = User.find_by_email(data['email'])
 
         if not current_user:
             return {
@@ -243,7 +249,7 @@ class UserLogin(Resource):
             access_token = create_access_token(identity = data['email'])
             refresh_token = create_refresh_token(identity = data['email'])
             return {
-                'message': 'Logged in as {}'.format(current_user.username),
+                'message': 'Logged in as {}'.format(current_user.email),
                 'access_token': access_token,
                 'refresh_token': refresh_token,
                 'status': True
@@ -307,12 +313,12 @@ class TokenRefresh(Resource):
 '''
 These api resources are just for testing purposes, probably shouldn't/won't be used by the front-end
 '''    
-class AllUsers(Resource):
-    def get(self):
-        return_dict = {}
-        for u in User.query.all():
-            return_dict[u.username] = u.password
-        return return_dict  
+# class AllUsers(Resource):
+#     def get(self):
+#         return_dict = {}
+#         for u in User.query.all():
+#             return_dict[u.username] = u.password
+#         return return_dict  
       
 class SecretResource(Resource):
     @jwt_required

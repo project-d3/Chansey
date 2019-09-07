@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c9d33d342f55
+Revision ID: 7aed96ea650d
 Revises: 
-Create Date: 2019-09-07 07:09:24.375812
+Create Date: 2019-09-07 14:48:04.804214
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c9d33d342f55'
+revision = '7aed96ea650d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -45,13 +45,14 @@ def upgrade():
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('username', sa.String(length=120), nullable=False),
+    sa.Column('name', sa.String(length=120), nullable=False),
+    sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=120), nullable=False),
     sa.Column('school_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['school_id'], ['school.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('username')
+    sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
     op.create_table('report',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('severity', sa.Integer(), nullable=True),
@@ -84,6 +85,7 @@ def downgrade():
     op.drop_table('symptomreportlink')
     op.drop_table('buildingreportlink')
     op.drop_table('report')
+    op.drop_index(op.f('ix_user_email'), table_name='user')
     op.drop_table('user')
     op.drop_table('building')
     op.drop_table('symptom')

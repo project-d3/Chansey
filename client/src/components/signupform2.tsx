@@ -45,7 +45,7 @@ const Choose = styled("select")`
   margin-bottom: 1vh;
   outline: none;
   font-family: "Quicksand", sans-serif;
-  font-size: 4vw;
+  font-size: 1.5vw;
   &:focus {
     outline: none;
   }
