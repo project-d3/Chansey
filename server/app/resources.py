@@ -1,8 +1,10 @@
 from flask_restful import Resource, reqparse
 from app import api
-from .models import User
+from .models import User, Report, Symptom, Building, School
 from app import db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+from datetime import datetime
+
 
 ''' 
 START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
@@ -14,7 +16,6 @@ report_parser.add_argument('severity', help = 'This field cannot be blank', requ
 report_parser.add_argument('buildings', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('symptoms', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('user', help = 'This field cannot be blank', required = True)
-report_parser.add_argument('school', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('date', help = 'This field cannot be blank', required = True)
 
 # parser for authenticating
@@ -105,14 +106,36 @@ class AddSymptom(Resource):
 class SubmitReport(Resource):
     def post(self):
         data = report_parser.parse_args()
-
-        date = data['date']
-        school = data['school']
+        # grabbing all raw data from request
+        severity = data['severity']
+        date = data['date'] # expected format for date: MM/DD/YYYY
         user = data['user']
         symptoms = data['symptoms']
         buildings = data['buildings']
+        # converting raw data into variables to instantiate Report
+        user = User.query.filter_by(username=user).first().id
+        if not user:
+            return {
+                'message': 'Requested user for report not found in database.',
+                'status': False
+            }
+        school = User.query.filter_by(id=user).first().school.id
+        if not school:
+            return {
+                'message': 'Requested user for report not found in database.',
+                'status': False
+            }
+        date = datetime.strptime(date, "%m/%d/%Y").date()
+        # instantiate report from variables
+        new_report = Report(severity=severity, user_id=user, school_id=school, date=date)
 
-        new_report = Report()
+        # adding linked symptoms and buildings through for loop
+        new_report.symptoms = []
+        new_report.buildings = []
+        for symptom in symptoms:
+            new_report.symptoms.append(Symptom.query.filter_by(name=symptom).first())
+        for building in buildings:
+            new_report.buildings.append(Building.query.filter_by(name=building).first())
 
         try:
             db.session.add(new_report)
