@@ -31,7 +31,7 @@ api.add_resource(UserLogoutRefresh, '/logout/refresh')
 api.add_resource(TokenRefresh, '/token/refresh')
 
 # more_info
-api.add_resource()
+# api.add_resource()
 
 # endpoints only for testing purposes
 api.add_resource(AllUsers, '/users')
