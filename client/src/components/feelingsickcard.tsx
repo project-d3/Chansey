@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Card = styled("div")`
   background: #f7a9a8;
@@ -21,12 +22,13 @@ const Message = styled("p")`
   font-weight: bold;
 `;
 
-const ButtonDiv = styled("div")`
+const ButtonDiv = styled(Link)`
   background: #feffe8;
   margin-bottom: 5vh;
   border-radius: 25px;
   color: #c4a29e;
   transition: 0.3s;
+  text-decoration: none;
   &:hover {
     background: #c4a29e;
     color: #feffe8;
@@ -50,8 +52,9 @@ export default class FeelingSickCard extends React.Component<viewfunc> {
       <>
         <Card>
           <Message>Feeling sick?</Message>
-          <ButtonDiv>
-            <ButtonText onClick={this.props.view}>YES</ButtonText>
+          {/* <ButtonDiv onClick={this.props.view}> */}
+          <ButtonDiv to="/symptomform">
+            <ButtonText>YES</ButtonText>
           </ButtonDiv>
         </Card>
       </>

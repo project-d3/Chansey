@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TempNavBar from "../components/tempnavbar";
 import FeelingSickCard from "../components/feelingsickcard";
 import SymptomForm from "../components/symptomform";
+import Hotspots from "../components/hotspots";
 
 const Page = styled("div")`
   width: 100%;
@@ -12,6 +13,15 @@ const Page = styled("div")`
 
 const Content = styled("div")`
   display: flex;
+  justify-content: space-between;
+`;
+
+const RightWrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  width: 55%;
+  margin-right: auto;
+  margin-left: auto;
 `;
 
 export default class HomePage extends React.Component<
@@ -41,6 +51,9 @@ export default class HomePage extends React.Component<
           <TempNavBar />
           <Content>
             <FeelingSickCard view={this.showForm.bind(this)}></FeelingSickCard>
+            <RightWrapper>
+              <Hotspots></Hotspots>
+            </RightWrapper>
           </Content>
         </Page>
         <SymptomForm show={this.state.showform}></SymptomForm>
