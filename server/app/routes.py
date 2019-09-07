@@ -5,15 +5,12 @@ from flask_restful import Resource
 from .resources import *
 import re
 
-
-# @app.route('/api/')
-# @app.route('/api/index')
-# def index():
-#     return render_template('index.html')
-
 @app.route('/')
 @app.route('/signin')
 @app.route('/signup1')
+@app.route('/home')
+@app.route('/signup2')
+@app.route('/symptomform')
 def index():
     return render_template('index.html')
 
@@ -40,10 +37,4 @@ api.add_resource(UserLogin, '/api/login')
 api.add_resource(UserLogoutAccess, '/api/logout/access')
 api.add_resource(UserLogoutRefresh, '/api/logout/refresh')
 api.add_resource(TokenRefresh, '/api/token/refresh')
-
-# more_info
-# api.add_resource()
-
-# endpoints only for testing purposes
-# api.add_resource(AllUsers, '/api/users')
-api.add_resource(SecretResource, '/api/secret')
+api.add_resource(UserAdditionalInformation, '/api/additional_info_form')
