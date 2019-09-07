@@ -15,7 +15,11 @@ def index():
 api.add_resource(SubmitReport, '/submit_report') # to submit a report
 api.add_resource(HotspotSymptomsData, '/get_home_data') # to get a dictionary with data necessary for home page
 api.add_resource(ChartsData, '/get_charts_data') # to get a dictionary with all the charts necessary for the charts page
-# api.add_resource(AddReport, )
+
+# adding new schools/buildings (and symptoms if necessary?)
+api.add_resource(AddSchool, '/add_school')
+api.add_resource(AddBuilding, '/add_building')
+api.add_resource(AddSymptom, '/add_symptom')
 
 # authentication endpoints
 api.add_resource(UserRegistration, '/registration')

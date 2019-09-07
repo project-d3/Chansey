@@ -4,30 +4,78 @@ from .models import User
 from app import db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
+''' 
+START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
+'''
 
+# parser for adding a new report
 report_parser = reqparse.RequestParser()
 report_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('campus_hotspots', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('recent_symptoms', help = 'This field cannot be blank', required = True)
 
+# parser for authenticating
+auth_parser = reqparse.RequestParser()
+auth_parser.add_argument('username', help = 'This field cannot be blank', required = True)
+auth_parser.add_argument('password', help = 'This field cannot be blank', required = True)
+
+# parser for adding building
+building_parser = reqparse.RequestParser()
+building_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
+building_parser.add_argument('campus_hotspots', help = 'This field cannot be blank', required = True)
+building_parser.add_argument('recent_symptoms', help = 'This field cannot be blank', required = True)
+
+# parser for adding school
+school_parser = reqparse.RequestParser()
+school_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
+school_parser.add_argument('campus_hotspots', help = 'This field cannot be blank', required = True)
+school_parser.add_argument('recent_symptoms', help = 'This field cannot be blank', required = True)
+
+# parser for adding symptom
+symptom_parser = reqparse.RequestParser()
+symptom_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
+symptom_parser.add_argument('campus_hotspots', help = 'This field cannot be blank', required = True)
+symptom_parser.add_argument('recent_symptoms', help = 'This field cannot be blank', required = True)
+
+'''
+END OF ARG PARSER SECTION
+'''
+
+# adding new schools/buildings (and symptoms if necessary?)
+
+class AddBuilding(Resource):
+    def post(self):
+        data = building_parser.parse_args()
+
+class AddSchool(Resource):
+    def post(self):
+        data = school_parser.parse_args()
+
+class AddSymptom(Resource):
+    def post(self):
+        data = symptom_parser.parse_args()
+
+
+# post endpoint for submiting a new report
 class SubmitReport(Resource):
     def post(self):
         data = report_parser.parse_args()
 
         
-        
+# get endpoints to get data for different pages       
 class HotspotSymptomsData(Resource):
     def get(self):
         return "test"
 
-class ChartsData(Resource):
+class SchoolChartsData(Resource):
     def get(self):
         return "test"
 
-auth_parser = reqparse.RequestParser()
-auth_parser.add_argument('username', help = 'This field cannot be blank', required = True)
-auth_parser.add_argument('password', help = 'This field cannot be blank', required = True)
+class UserChartsData(Resource):
+    def get(self):
+        return "test"
 
+        
 class UserRegistration(Resource):
     def post(self):
         data = auth_parser.parse_args()

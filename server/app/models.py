@@ -48,7 +48,7 @@ REPORT: Each time a user reports a set of symptoms
 
 SYMPTOM: 1 record for every symptom type
 
-BUILDING:
+BUILDING: 1 record for every building at every school
 
 
 '''
@@ -66,8 +66,8 @@ class Report(db.Model):
 class Symptom(db.Model):
     __tablename__ = 'symptoms'
     id = db.Column(db.Integer, primary_key = True)
-    name = 
-    reports = 
+    name = db.Column(db.String(120), unique=True)
+    reports = db.relationship('Report', backref='symptom', lazy='dynamic')
 
 class School(db.Model):
     __tablename__ = 'schools'
@@ -76,15 +76,23 @@ class School(db.Model):
     name = db.Column(db.String(120), unique=True)
     users = db.relationship('User', backref='school', lazy='dynamic')
     reports = db.relationship('Report', backref='school', lazy='dynamic')
+    buildings = db.relationship('Building', backref='school', lazy='dynamic')
 
 
 class Building(db.Model):
     __tablename__ = 'buildings'
     id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120), unique=True)
+    reports = db.relationship('Report', secondary='buildingreportlink')
 
 
 # These tables are for many-to-many relationships
 class Symptomreportlink(db.Model):
-
+    __tablename__ = 'symptomreportlink'
+    symptom_id = db.Column(db.Integer, db.ForeignKey('symptom.id'), primary_key = True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), primary_key = True)
 
 class Buildingreportlink(db.Model):
+    __tablename__ = 'buildingreportlink'
+    building_id = db.Column(db.Integer, db.ForeignKey('symptom.id'), primary_key = True)
+    report_id = db.Column(db.Integer, db.ForeignKey('report.id'), primary_key = True)
