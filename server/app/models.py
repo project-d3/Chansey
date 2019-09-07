@@ -9,6 +9,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable = False)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     reports = db.relationship('Report', backref='user')
+    buildings = db.relationship('Building', secondary='buildinguserlink')
 
     def save_to_db(self):
         db.session.add(self)
@@ -81,6 +82,7 @@ class Building(db.Model):
     name = db.Column(db.String(120), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     reports = db.relationship('Report', secondary='buildingreportlink')
+    users = db.relationship('User', secondary='buildinguserlink')
 
 
 # These tables are for many-to-many relationships
@@ -93,3 +95,8 @@ class Buildingreportlink(db.Model):
     __tablename__ = 'buildingreportlink'
     building_id = db.Column(db.Integer, db.ForeignKey('building.id'), primary_key = True)
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'), primary_key = True)
+
+class Buildinguserlink(db.Model):
+    __tablename__ = 'buildinguserlink'
+    building_id = db.Column(db.Integer, db.ForeignKey('building.id'), primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key = True)

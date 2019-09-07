@@ -222,9 +222,35 @@ class UserAdditionalInformation(Resource):
         return return_dict
     
     def post(self):
-        data = additional_info_parser()
-        return "test"
-
+        data = additional_info_parser.parse_args()
+        user = User.find_by_email(data['email'])
+        if not user:
+            return {
+                'message': "Failed to change user's data.",
+                'status': False
+            }
+        school = School.query.filter_by(name = data['school']).first()
+        if not school:
+            return {
+                'message': "Failed to find chosen school.",
+                'status': False
+            }
+        user.school_id = school.id
+        try:
+            buildings = data['buildings'].split(',')
+            for b in buildings:
+                user.buildings.append(Building.query.filter_by(name=b).first())
+            db.session.add(user)
+            db.session.commit()
+            return {
+                'message': "Successfully updated student settings.",
+                'status': True
+            }
+        except:
+            return {
+                'message': "Failed to update user settings",
+                'status': False
+            }
 class UserRegistration(Resource):
     def post(self):
         data = registration_parser.parse_args()
