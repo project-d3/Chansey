@@ -4,6 +4,7 @@ import TempNavBar from "../components/tempnavbar";
 import FeelingSickCard from "../components/feelingsickcard";
 import SymptomForm from "../components/symptomform";
 import Hotspots from "../components/hotspots";
+import Recents from "../components/recents";
 
 const Page = styled("div")`
   width: 100%;
@@ -53,6 +54,7 @@ export default class HomePage extends React.Component<
             <FeelingSickCard view={this.showForm.bind(this)}></FeelingSickCard>
             <RightWrapper>
               <Hotspots></Hotspots>
+              <Recents></Recents>
             </RightWrapper>
           </Content>
         </Page>
