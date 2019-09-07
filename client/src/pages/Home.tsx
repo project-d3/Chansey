@@ -53,8 +53,8 @@ export default class HomePage extends React.Component<
           <Content>
             <FeelingSickCard view={this.showForm.bind(this)}></FeelingSickCard>
             <RightWrapper>
-              <Hotspots></Hotspots>
-              <Recents></Recents>
+              <Hotspots {...this.props}></Hotspots>
+              <Recents {...this.props}></Recents>
             </RightWrapper>
           </Content>
         </Page>

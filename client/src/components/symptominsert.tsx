@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const Wrapper = styled("div")`
   background: #c4a29e;
@@ -21,12 +22,25 @@ const Title = styled("p")`
   font-weight: bold;
 `;
 
+const SymptomDropdown = styled("select")``;
+const SymptomOption = styled("option")``;
+
 export default class SymptomInsert extends React.Component {
+  getSymptoms() {
+    //get symptoms
+    var symptoms;
+    axios.get("/symptoms").then(response => {
+      symptoms = response.data;
+    });
+  }
   render() {
     return (
       <>
         <Wrapper>
           <Title>Symptoms</Title>
+          <SymptomDropdown>
+            <SymptomOption></SymptomOption>
+          </SymptomDropdown>
         </Wrapper>
       </>
     );
