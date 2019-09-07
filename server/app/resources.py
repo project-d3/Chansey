@@ -1,14 +1,34 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from app import api
+from .models import UserModel
+from app import db
+
+
+parser = reqparse.RequestParser()
+parser.add_argument('username', help = 'This field cannot be blank', required = True)
+parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 
 class UserRegistration(Resource):
     def post(self):
-        return {'message': 'User registration'}
+        data = parser.parse_args()
+        new_user = UserModel(username = data['username'], password = data['password'])
+        print("user: {} password: {} ".format(new_user.username, new_user.password))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return {
+                'message': 'User has been registered: {}'.format(new_user.username)
+            }
+        except:
+            return {
+                'message': 'Error while attempting to register user.'
+            }
 
 
 class UserLogin(Resource):
     def post(self):
+        data = parser.parse_args()
         return {'message': 'User login'}
       
       
