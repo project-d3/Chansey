@@ -45,6 +45,12 @@ school_parser.add_argument('name', help = 'This field cannot be blank', required
 symptom_parser = reqparse.RequestParser()
 symptom_parser.add_argument('name', help = 'This field cannot be blank', required = True)
 
+# parser for adding 
+additional_info_parser = reqparse.RequestParser()
+additional_info_parser.add_argument('email', help = 'This field cannot be blank', required = True)
+additional_info_parser.add_argument('school', help = 'This field cannot be blank', required = True)
+additional_info_parser.add_argument('buildings', help = 'This field cannot be blank', required = True)
+
 '''
 END OF ARG PARSER SECTION
 '''
