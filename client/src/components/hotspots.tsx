@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const HotWrapper = styled("div")`
   width: 100%;
@@ -44,7 +45,7 @@ export default class Hotspots extends React.Component {
     this.renderHotspots = this.renderHotspots.bind(this);
   }
   renderHotspots() {
-    // fetch API and render Buildings
+    axios.post("/api/get_home_data", {});
   }
   render() {
     return (

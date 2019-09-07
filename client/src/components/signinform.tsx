@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { RouteComponentProps } from "react-router-dom";
+import axios from "axios";
 
 const Form = styled("form")`
   background: #f7a9a8;
@@ -62,13 +63,50 @@ const LoginButton = styled("button")`
   }
 `;
 
-export default class SigninForm extends React.Component<RouteComponentProps> {
+export default class SigninForm extends React.Component<
+  RouteComponentProps,
+  { email: String; password: String }
+> {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onEmailChange = this.onEmailChange.bind(this);
+    this.onPassChange = this.onPassChange.bind(this);
   }
+
+  componentWillMount() {
+    this.setState({
+      email: "",
+      password: ""
+    });
+  }
+
   handleSubmit() {
-    this.props.history.push("/home");
+    axios
+      .post("/api/login", {
+        email: this.state.email,
+        password: this.state.password
+      })
+      .then(response => {
+        if (response.data["status"] == true) {
+          this.props.history.push({
+            pathname: "/home",
+            state: { email: this.state.email }
+          });
+        }
+      });
+  }
+
+  onEmailChange(e) {
+    this.setState({
+      email: e.target.value
+    });
+  }
+
+  onPassChange(e) {
+    this.setState({
+      password: e.target.value
+    });
   }
   render() {
     return (
@@ -76,8 +114,18 @@ export default class SigninForm extends React.Component<RouteComponentProps> {
         <Form onSubmit={this.handleSubmit}>
           <FormItems>
             <SigninText>Sign in!</SigninText>
-            <Input type="email" required placeholder="Email"></Input>
-            <Input type="password" required placeholder="Password"></Input>
+            <Input
+              type="email"
+              required
+              placeholder="Email"
+              onChange={this.onEmailChange}
+            ></Input>
+            <Input
+              type="password"
+              required
+              placeholder="Password"
+              onChange={this.onPassChange}
+            ></Input>
             <LoginButton type="submit">Log in</LoginButton>
           </FormItems>
         </Form>
