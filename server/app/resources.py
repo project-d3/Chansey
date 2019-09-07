@@ -3,7 +3,7 @@ from app import api
 from .models import User, Report, Symptom, Building, School
 from app import db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 ''' 
@@ -15,11 +15,10 @@ home_data_parser.add_argument('email', help = 'This field cannot be blank', requ
 
 # parser for adding a new report
 report_parser = reqparse.RequestParser()
-report_parser.add_argument('severity', help = 'This field cannot be blank', required = True)
-report_parser.add_argument('buildings', help = 'This field cannot be blank', required = True)
+report_parser.add_argument('severity', help = 'This field cannot be blank', required = True, type=int)
 report_parser.add_argument('symptoms', help = 'This field cannot be blank', required = True)
 report_parser.add_argument('email', help = 'This field cannot be blank', required = True)
-report_parser.add_argument('date', help = 'This field cannot be blank', required = True)
+report_parser.add_argument('date', help = 'This field cannot be blank', required = True, type=int)
 
 # parser for authenticating
 auth_parser = reqparse.RequestParser()
@@ -123,12 +122,9 @@ class SubmitReport(Resource):
         data = report_parser.parse_args()
         # grabbing all raw data from request
         severity = data['severity']
-        date = data['date'] # expected format for date: MM/DD/YYYY
+        date = data['date'] # expected format for date: int
         email = data['email']
         symptoms = data['symptoms']
-        buildings = data['buildings']
-        symptoms = symptoms.split(",")
-        buildings = buildings.split(",")
         # converting raw data into variables to instantiate Report
         user = User.query.filter_by(email=email).first()
         if not user:
@@ -144,22 +140,26 @@ class SubmitReport(Resource):
                 'status': False
             }
         school = school.id
-        date = datetime.strptime(date, "%m/%d/%Y").date()
+        date = datetime.today() - timedelta(days=date)
         # instantiate report from variables
         new_report = Report(severity=severity, user_id=user_id, school_id=school, date=date)
 
         # adding linked symptoms and buildings through for loop
         new_report.symptoms = []
         new_report.buildings = []
+        print(symptoms)
+        symptoms = symptoms.split(",")
         for symptom in symptoms:
-            new_report.symptoms.append(Symptom.query.filter_by(name=symptom).first())
-        for building in buildings:
-            new_report.buildings.append(Building.query.filter_by(name=building).first())
+            s = Symptom.query.filter_by(name=symptom).first()
+            if s:
+                new_report.symptoms.append(s)
+        for building in user.buildings:
+            new_report.buildings.append(Building.query.filter_by(name=building.name).first())
         try:
             db.session.add(new_report)
             db.session.commit()
             return {
-                'message': 'Successfully created report for user {}'.format(new_report.user.username),
+                'message': 'Successfully created report for user {}'.format(new_report.user.email),
                 'status': True
             }
         except:
@@ -184,15 +184,15 @@ class HotspotSymptomsData(Resource):
         buildings = {}
         for report in Report.query.filter_by(school_id = user.school_id).all():
             for symptom in report.symptoms:
-                if symptoms.has_key(symptom.name):
+                if symptom.name in symptoms:
                     symptoms[symptom.name] += 1
                 else:
                     symptoms[symptom.name] = 1
-            for buildings in report.buildings:
-                if symptoms.has_key(symptom.name):
-                    symptoms[symptom.name] += 1
+            for building in report.buildings:
+                if building.name in buildings:
+                    buildings[building.name] += 1
                 else:
-                    symptoms[symptom.name] = 1
+                    buildings[building.name] = 1
 
         return {
             'school': school,
