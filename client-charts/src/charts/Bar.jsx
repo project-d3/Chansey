@@ -10,8 +10,7 @@ import {
     Card,
     CardText,
     CardBody,
-    CardTitle,
-    CardSubtitle
+    CardTitle
 } from 'reactstrap';
 
 class Bar extends Component {
@@ -64,7 +63,6 @@ class Bar extends Component {
     }
 
     change_building = (event) => {
-        console.log(event);
         let building_number = event.target.value;
         this.setState({
             building: building_number
@@ -92,7 +90,7 @@ class Bar extends Component {
     get_dropdown = () => {
         return( 
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <DropdownToggle color="link" caret style={dropdown_style}>
+                <DropdownToggle color="link" caret style={dropdown_style} className="btn-lg">
                     {this.props.building_array[this.state.building].name}
                 </DropdownToggle>
                 <DropdownMenu>

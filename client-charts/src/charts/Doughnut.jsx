@@ -10,8 +10,7 @@ import {
     Card,
     CardText,
     CardBody,
-    CardTitle,
-    CardSubtitle
+    CardTitle
 } from 'reactstrap';
 
 class Doughnut extends Component {
@@ -82,7 +81,7 @@ class Doughnut extends Component {
     get_dropdown = () => {
         return( 
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <DropdownToggle color="link" caret style={dropdown_style}>
+                <DropdownToggle color="link" caret style={dropdown_style} className="btn-lg">
                     {this.props.building_array[this.state.building].name}
                 </DropdownToggle>
                 <DropdownMenu>
