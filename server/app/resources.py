@@ -166,7 +166,7 @@ class SubmitReport(Resource):
 # get endpoints to get data for different pages       
 class HotspotSymptomsData(Resource):
     def get(self):
-        home_data_parser.parse_args()
+        data = home_data_parser.parse_args()
         user = User.query.filter_by(email=data['email']).first()
         if not user:
             return {
@@ -205,8 +205,20 @@ class UserChartsData(Resource):
 
 
 '''
-START OF SECTION FOR 
+START OF SECTION FOR USER AUTHENTICATION LOGIC
 '''
+class UserAdditionalInformation(Resource):
+    def get(self):
+        return_dict = {}
+        schools = School.query.all()
+        for s in schools:
+            return_dict[s.name] = [b.name for b in s.buildings]
+        return return_dict
+    
+    def post(self):
+        data = additional_info_parser()
+        return "test"
+
 class UserRegistration(Resource):
     def post(self):
         data = registration_parser.parse_args()
@@ -307,22 +319,3 @@ class TokenRefresh(Resource):
             'status': True
         }
       
-      
-
-
-'''
-These api resources are just for testing purposes, probably shouldn't/won't be used by the front-end
-'''    
-# class AllUsers(Resource):
-#     def get(self):
-#         return_dict = {}
-#         for u in User.query.all():
-#             return_dict[u.username] = u.password
-#         return return_dict  
-      
-class SecretResource(Resource):
-    @jwt_required
-    def get(self):
-        return {
-            'answer': 42
-        }
