@@ -4,7 +4,8 @@ from passlib.hash import pbkdf2_sha256 as sha256
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique = True, nullable = False)
+    name = db.Column(db.String(120), nullable = False)
+    email = db.Column(db.String(120), unique = True, nullable = False, index = True)
     password = db.Column(db.String(120), nullable = False)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     reports = db.relationship('Report', backref='user')
@@ -14,8 +15,8 @@ class User(db.Model):
         db.session.commit()
 
     @classmethod
-    def find_by_username(cls, username):
-        return cls.query.filter_by(username = username).first()
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email = email).first()
 
     @staticmethod
     def generate_hash(password):
