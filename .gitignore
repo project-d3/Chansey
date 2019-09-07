@@ -1,5 +1,7 @@
 # vscode
 /.vscode
+/server/app/__pycache__
+/server/__pycache__
 
 #dependencies
 /client-charts/node_modules
