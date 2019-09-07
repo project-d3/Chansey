@@ -204,17 +204,17 @@ START OF SECTION FOR
 class UserRegistration(Resource):
     def post(self):
         data = auth_parser.parse_args()
-        new_user = User(username = data['email'], password = User.generate_hash(data['password']))
+        new_user = User(username = data['username'], password = User.generate_hash(data['password']))
 
-        if User.find_by_username(data['email']):
+        if User.find_by_username(data['username']):
             return {
-                'message': 'User {} already exists'. format(data['email']),
+                'message': 'User {} already exists'. format(data['username']),
                 'status': False
             }
         try:
             new_user.save_to_db()
-            access_token = create_access_token(identity = data['email'])
-            refresh_token = create_refresh_token(identity = data['email'])
+            access_token = create_access_token(identity = data['username'])
+            refresh_token = create_refresh_token(identity = data['username'])
             return {
                 'message': 'User has been registered: {}'.format(new_user.username),
                 'access_token': access_token,
@@ -231,17 +231,17 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
     def post(self):
         data = auth_parser.parse_args()
-        current_user = User.find_by_username(data['email'])
+        current_user = User.find_by_username(data['username'])
 
         if not current_user:
             return {
-                'message': 'User {} doesn\'t exist'.format(data['email']),
+                'message': 'User {} doesn\'t exist'.format(data['username']),
                 'status': False
             }
         
         if User.verify_hash(data['password'], current_user.password):
-            access_token = create_access_token(identity = data['email'])
-            refresh_token = create_refresh_token(identity = data['email'])
+            access_token = create_access_token(identity = data['username'])
+            refresh_token = create_refresh_token(identity = data['username'])
             return {
                 'message': 'Logged in as {}'.format(current_user.username),
                 'access_token': access_token,
