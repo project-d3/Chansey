@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { RouteComponentProps } from "react-router-dom";
 import { SimpleSelect } from "react-selectize";
 import Axios from "axios";
+import { async } from "q";
 
 const Form = styled("form")`
   background: #f7a9a8;
@@ -73,13 +74,14 @@ var upennbuildings = require("./UPennBuildings.json");
 
 export default class SignupForm2 extends React.Component<
   RouteComponentProps,
-  { university: string }
+  { university: string; schools: any; buildings: any }
 > {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderOptions = this.renderOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.renderSchools = this.renderSchools.bind(this);
   }
 
   handleSubmit() {
@@ -88,8 +90,23 @@ export default class SignupForm2 extends React.Component<
 
   componentWillMount() {
     this.setState({
-      university: "None"
+      university: "None",
+      schools: []
     });
+  }
+
+  async componentDidMount() {
+    if (!this.state.schools) {
+      (async () => {
+        try {
+          this.setState({
+            schools: await this.getData()
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
   }
 
   handleChange(e) {
@@ -99,29 +116,32 @@ export default class SignupForm2 extends React.Component<
   }
 
   renderOptions() {
-    if (this.state.university === "upenn") {
-      return upennbuildings["buildings"].map(building => (
+    var buildings = [];
+    if (this.state.university != "None") {
+      Axios.get("/api/additional_info_form").then(response => {
+        buildings = response.data[this.state.university];
+      });
+      return buildings.map(building => (
         <Option value={building}>{building}</Option>
       ));
     }
-    if (this.state.university === "ucla") {
-      return uclabuildings["buildings"].map(building => (
-        <Option value={building}>{building}</Option>
-      ));
-    }
-    return <Option>--</Option>;
+    return buildings;
   }
 
-  renderSchools() {
-    var schools = [];
-    Axios.get("/api/additional_info_form").then(response => {
-      for (var school in response.data) {
-        schools.push(<Option value={school}>{school}</Option>);
-      }
-    });
-    console.log("hi");
-    return schools;
-  }
+  getData = async () => {
+    const res = await Axios("/api/additional_info_form");
+    return await res.data;
+  };
+
+  renderSchools = async () => {
+    try {
+      const response = await Axios.get("/api/additional_info_form");
+      this.setState({ buildings: response.data });
+      console.log("response");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     return (
@@ -129,19 +149,40 @@ export default class SignupForm2 extends React.Component<
         <Form onSubmit={this.handleSubmit}>
           <FormItems>
             <Section>
-              <SectionTitle>University/College</SectionTitle>
+              <SectionTitle id="Uni">University/College</SectionTitle>
               <Choose id="university" onChange={this.handleChange}>
                 <Option value="None">Choose a school</Option>
-                {this.renderSchools()}
+                {this.state.schools ? (
+                  this.state.schools.map(school => (
+                    <Option value={school}>{school}</Option>
+                  ))
+                ) : (
+                  <Option value="None">LOADING</Option>
+                )}
               </Choose>
             </Section>
             <Section>
               <SectionTitle>Top 5 most visited buildings</SectionTitle>
-              <Choose>{this.renderOptions()}</Choose>
-              <Choose>{this.renderOptions()}</Choose>
-              <Choose>{this.renderOptions()}</Choose>
-              <Choose>{this.renderOptions()}</Choose>
-              <Choose>{this.renderOptions()}</Choose>
+              <Choose>
+                <Option value="None">---</Option>
+                {/* {this.renderOptions()} */}
+              </Choose>
+              <Choose>
+                <Option value="None">---</Option>
+                {/* {this.renderOptions()} */}
+              </Choose>
+              <Choose>
+                <Option value="None">---</Option>
+                {/* {this.renderOptions()} */}
+              </Choose>
+              <Choose>
+                <Option value="None">---</Option>
+                {/* {this.renderOptions()} */}
+              </Choose>
+              <Choose>
+                <Option value="None">---</Option>
+                {/* {this.renderOptions()} */}
+              </Choose>
             </Section>
 
             <RegisterButton type="submit">Register</RegisterButton>
