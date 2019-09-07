@@ -1,4 +1,7 @@
-# dependencies
+# vscode
+/.vscode
+
+#dependencies
 /client-charts/node_modules
 /.pnp
 .pnp.js
