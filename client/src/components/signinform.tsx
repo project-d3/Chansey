@@ -84,7 +84,7 @@ export default class SigninForm extends React.Component<
   handleSubmit() {
     axios
       .post("/api/login", {
-        username: this.state.email,
+        email: this.state.email,
         password: this.state.password
       })
       .then(response => {
@@ -95,7 +95,6 @@ export default class SigninForm extends React.Component<
           });
         }
       });
-    this.props.history.push("/home");
   }
 
   onEmailChange(e) {

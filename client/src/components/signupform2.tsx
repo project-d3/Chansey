@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { RouteComponentProps } from "react-router-dom";
 import { SimpleSelect } from "react-selectize";
+import Axios from "axios";
 
 const Form = styled("form")`
   background: #f7a9a8;
@@ -111,6 +112,17 @@ export default class SignupForm2 extends React.Component<
     return <Option>--</Option>;
   }
 
+  renderSchools() {
+    var schools = [];
+    Axios.get("/api/additional_info_form").then(response => {
+      for (var school in response.data) {
+        schools.push(<Option value={school}>{school}</Option>);
+      }
+    });
+    console.log("hi");
+    return schools;
+  }
+
   render() {
     return (
       <>
@@ -119,11 +131,8 @@ export default class SignupForm2 extends React.Component<
             <Section>
               <SectionTitle>University/College</SectionTitle>
               <Choose id="university" onChange={this.handleChange}>
-                <Option>Choose a University</Option>
-                <Option value="upenn">University of Pennyslvania</Option>
-                <Option value="ucla">
-                  University of California - Los Angeles
-                </Option>
+                <Option value="None">Choose a school</Option>
+                {this.renderSchools()}
               </Choose>
             </Section>
             <Section>
