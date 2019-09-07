@@ -2,13 +2,14 @@ from flask import Flask
 from app import db
 from passlib.hash import pbkdf2_sha256 as sha256
 
-class UserModel(db.Model):
+class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique = True, nullable = False)
     password = db.Column(db.String(120), nullable = False)
-    
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -40,7 +41,50 @@ class RevokedTokenModel(db.Model):
         query = cls.query.filter_by(jti = jti).first()
         return bool(query)
 
-# class Symptoms(db.Model):
+'''
+CORE API DATABASE TABLES
 
-# class Symptom(db.Model):
+REPORT: Each time a user reports a set of symptoms
 
+SYMPTOM: 1 record for every symptom type
+
+BUILDING:
+
+
+'''
+
+
+class Report(db.Model):
+    ___tablename__ = 'reports'
+    id = db.Column(db.Integer, primary_key = True)
+    date = db.Column(db.Date)
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    symptoms = db.relationship('Symptom', secondary = 'symptomreportlink')
+    buildings = db.relationship('Building', secondary = 'buildingreportlink')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Symptom(db.Model):
+    __tablename__ = 'symptoms'
+    id = db.Column(db.Integer, primary_key = True)
+    name = 
+    reports = 
+
+class School(db.Model):
+    __tablename__ = 'schools'
+    
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(120), unique=True)
+    users = db.relationship('User', backref='school', lazy='dynamic')
+    reports = db.relationship('Report', backref='school', lazy='dynamic')
+
+
+class Building(db.Model):
+    __tablename__ = 'buildings'
+    id = db.Column(db.Integer, primary_key = True)
+
+
+# These tables are for many-to-many relationships
+class Symptomreportlink(db.Model):
+
+
+class Buildingreportlink(db.Model):
