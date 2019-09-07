@@ -13,6 +13,7 @@ def index():
 # CORE API ENDPOINTS
 
 api.add_resource(SubmitReport, '/submit_report') # to submit a report
+
 api.add_resource(HotspotSymptomsData, '/get_home_data') # to get a dictionary with data necessary for home page
 api.add_resource(ChartsData, '/get_charts_data') # to get a dictionary with all the charts necessary for the charts page
 

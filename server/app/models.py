@@ -57,6 +57,7 @@ BUILDING: 1 record for every building at every school
 class Report(db.Model):
     ___tablename__ = 'reports'
     id = db.Column(db.Integer, primary_key = True)
+    severity = db.Column(db.Integer)
     date = db.Column(db.Date)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     symptoms = db.relationship('Symptom', secondary = 'symptomreportlink')
@@ -83,6 +84,7 @@ class Building(db.Model):
     __tablename__ = 'buildings'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), unique=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     reports = db.relationship('Report', secondary='buildingreportlink')
 
 
