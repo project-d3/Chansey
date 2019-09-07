@@ -3,12 +3,11 @@ from app import db
 from passlib.hash import pbkdf2_sha256 as sha256
 
 class User(db.Model):
-    __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique = True, nullable = False)
     password = db.Column(db.String(120), nullable = False)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    reports = db.relationship('Report', backref='user')
 
     def save_to_db(self):
         db.session.add(self)
@@ -55,7 +54,6 @@ BUILDING: 1 record for every building at every school
 
 
 class Report(db.Model):
-    ___tablename__ = 'reports'
     id = db.Column(db.Integer, primary_key = True)
     severity = db.Column(db.Integer)
     date = db.Column(db.Date)
@@ -65,14 +63,11 @@ class Report(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Symptom(db.Model):
-    __tablename__ = 'symptoms'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), unique=True)
-    reports = db.relationship('Report', backref='symptom', lazy='dynamic')
+    reports = db.relationship('Report', secondary = 'symptomreportlink')
 
-class School(db.Model):
-    __tablename__ = 'schools'
-    
+class School(db.Model):    
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), unique=True)
     users = db.relationship('User', backref='school', lazy='dynamic')
@@ -81,7 +76,6 @@ class School(db.Model):
 
 
 class Building(db.Model):
-    __tablename__ = 'buildings'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(120), unique=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
@@ -96,5 +90,5 @@ class Symptomreportlink(db.Model):
 
 class Buildingreportlink(db.Model):
     __tablename__ = 'buildingreportlink'
-    building_id = db.Column(db.Integer, db.ForeignKey('symptom.id'), primary_key = True)
+    building_id = db.Column(db.Integer, db.ForeignKey('building.id'), primary_key = True)
     report_id = db.Column(db.Integer, db.ForeignKey('report.id'), primary_key = True)

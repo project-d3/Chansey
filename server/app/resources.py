@@ -9,6 +9,9 @@ from datetime import datetime
 ''' 
 START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
 '''
+# parser for getting homepage data
+home_data_parser = reqparse.RequestParser()
+home_data_parser.add_argument('user', help = 'This field cannot be blank', required = True)
 
 # parser for adding a new report
 report_parser = reqparse.RequestParser()
@@ -62,7 +65,7 @@ class AddSchool(Resource):
 class AddBuilding(Resource):
     def post(self):
         data = building_parser.parse_args()
-        school_id = School.query.filter_by(name=data['school']).first()
+        school_id = School.query.filter_by(name=data['school']).first().id
 
         if not school_id:
             return {
@@ -112,22 +115,26 @@ class SubmitReport(Resource):
         user = data['user']
         symptoms = data['symptoms']
         buildings = data['buildings']
+        symptoms = symptoms.split(",")
+        buildings = buildings.split(",")
         # converting raw data into variables to instantiate Report
-        user = User.query.filter_by(username=user).first().id
+        user = User.query.filter_by(username=user).first()
         if not user:
             return {
                 'message': 'Requested user for report not found in database.',
                 'status': False
             }
-        school = User.query.filter_by(id=user).first().school.id
+        user_id = user.id
+        school = user.school
         if not school:
             return {
-                'message': 'Requested user for report not found in database.',
+                'message': 'Requested school for report not found in database.',
                 'status': False
             }
+        school = school.id
         date = datetime.strptime(date, "%m/%d/%Y").date()
         # instantiate report from variables
-        new_report = Report(severity=severity, user_id=user, school_id=school, date=date)
+        new_report = Report(severity=severity, user_id=user_id, school_id=school, date=date)
 
         # adding linked symptoms and buildings through for loop
         new_report.symptoms = []
@@ -136,7 +143,6 @@ class SubmitReport(Resource):
             new_report.symptoms.append(Symptom.query.filter_by(name=symptom).first())
         for building in buildings:
             new_report.buildings.append(Building.query.filter_by(name=building).first())
-
         try:
             db.session.add(new_report)
             db.session.commit()
@@ -154,7 +160,33 @@ class SubmitReport(Resource):
 # get endpoints to get data for different pages       
 class HotspotSymptomsData(Resource):
     def get(self):
-        return "test"
+        home_data_parser.parse_args()
+        user = User.query.filter_by(username=data['user']).first()
+        if not user:
+            return {
+                'message': 'Failed to get data for incorrect user.',
+                'status': False
+            }
+        school = user.school.name
+        symptoms = {}
+        buildings = {}
+        for report in Report.query.filter_by(school_id = user.school_id).all():
+            for symptom in report.symptoms:
+                if symptoms.has_key(symptom.name):
+                    symptoms[symptom.name] += 1
+                else:
+                    symptoms[symptom.name] = 1
+            for buildings in report.buildings:
+                if symptoms.has_key(symptom.name):
+                    symptoms[symptom.name] += 1
+                else:
+                    symptoms[symptom.name] = 1
+
+        return {
+            'school': school,
+            'symptoms': symptoms,
+            'buildings': buildings
+        }
 
 class SchoolChartsData(Resource):
     def get(self):
@@ -172,17 +204,17 @@ START OF SECTION FOR
 class UserRegistration(Resource):
     def post(self):
         data = auth_parser.parse_args()
-        new_user = User(username = data['username'], password = User.generate_hash(data['password']))
+        new_user = User(username = data['email'], password = User.generate_hash(data['password']))
 
-        if User.find_by_username(data['username']):
+        if User.find_by_username(data['email']):
             return {
-                'message': 'User {} already exists'. format(data['username']),
+                'message': 'User {} already exists'. format(data['email']),
                 'status': False
             }
         try:
             new_user.save_to_db()
-            access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
+            access_token = create_access_token(identity = data['email'])
+            refresh_token = create_refresh_token(identity = data['email'])
             return {
                 'message': 'User has been registered: {}'.format(new_user.username),
                 'access_token': access_token,
@@ -199,17 +231,17 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
     def post(self):
         data = auth_parser.parse_args()
-        current_user = User.find_by_username(data['username'])
+        current_user = User.find_by_username(data['email'])
 
         if not current_user:
             return {
-                'message': 'User {} doesn\'t exist'.format(data['username']),
+                'message': 'User {} doesn\'t exist'.format(data['email']),
                 'status': False
             }
         
         if User.verify_hash(data['password'], current_user.password):
-            access_token = create_access_token(identity = data['username'])
-            refresh_token = create_refresh_token(identity = data['username'])
+            access_token = create_access_token(identity = data['email'])
+            refresh_token = create_refresh_token(identity = data['email'])
             return {
                 'message': 'Logged in as {}'.format(current_user.username),
                 'access_token': access_token,
