@@ -11,6 +11,8 @@ flask = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
 flask-jwt-extended = "*"
+passlib = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.6"
