@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .config import Config
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../../client/build/static", template_folder="../../client/build")
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)

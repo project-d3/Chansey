@@ -1,13 +1,13 @@
 from app import app
 from app import api
-from flask import jsonify
+from flask import jsonify, render_template
 from flask_restful import Resource
 from .resources import *
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return jsonify({'message': 'Hello, World!'})
+    return render_template('index.html')
 
 
 
