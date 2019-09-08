@@ -119,68 +119,47 @@ def one_report(severity, email, days, symptoms):
 def make_reports():
     # 7 Days ago
     days = 7
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "user2test.com", days,     "Sneezing")
+    one_report(3, "user4@test.com", days,    "Cough")
     one_report(3, "user5@test.com", days,    "Sneezing,Chills,Cough")
 
     # 6 Days ago
     days = 6
     one_report(3, "pomytkin@umd.edu", days,  "Rash")
-    one_report(3, "dhanvee@umd.edu", days,   "")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "user1@test.com", days,    "Sneezing")
+    one_report(3, "user2test.com", days,     "Sneezing,Chills,Cough")
+    one_report(3, "user4@test.com", days,    "Cough,Chills")
     one_report(3, "user5@test.com", days,    "Chills,Cough,Fever,Headache")
     
     # 5 Days ago
     days = 5
-    one_report(3, "pomytkin@umd.edu", days,  "")
+    one_report(3, "pomytkin@umd.edu", days,  "Rash")
     one_report(3, "dhanvee@umd.edu", days,   "Cough")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
-    one_report(3, "user5@test.com", days,    "Cough,Fever,Headache,Chills")
+    one_report(3, "user1@test.com", days,    "Cough,Chills")
+    one_report(3, "user2test.com", days,     "Chills,Cough,Fever,Headache")
+    one_report(3, "user5@test.com", days,    "Chills,Cough,Fever,Headache")
     
     # 4 Days ago
     days = 4
-    one_report(3, "pomytkin@umd.edu", days,  "")
-    one_report(3, "dhanvee@umd.edu", days,   "")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "pomytkin@umd.edu", days,  "Rash")
+    one_report(3, "dhanvee@umd.edu", days,   "Rash")
+    one_report(3, "user2test.com", days,     "Chills,Cough,Fever,Headache")
     one_report(3, "user5@test.com", days,    "Cough,Headache")
     
     # 3 Days ago
     days = 3
-    one_report(3, "pomytkin@umd.edu", days,  "")
-    one_report(3, "dhanvee@umd.edu", days,   "")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "dhanvee@umd.edu", days,   "Sneezing,Rash")
+    one_report(3, "user2test.com", days,     "Chills,Cough,Fever,Headache")
+    one_report(3, "user4@test.com", days,    "Cough,Chills,Fever")
     one_report(3, "user5@test.com", days,    "Cough")
     
     # 2 Days ago
     days = 2
-    one_report(3, "pomytkin@umd.edu", days,  "")
-    one_report(3, "dhanvee@umd.edu", days,   "")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "user2test.com", days,     "Cough,Chills")
     one_report(3, "user5@test.com", days,    "Cough")
     
     # 1 Days ago
     days = 1
-    one_report(3, "pomytkin@umd.edu", days,  "")
-    one_report(3, "dhanvee@umd.edu", days,   "")
-    one_report(3, "user1@test.com", days,    "")
-    one_report(3, "user2test.com", days,     "")
-    one_report(3, "user3@test.com", days,    "")
-    one_report(3, "user4@test.com", days,    "")
+    one_report(3, "pomytkin@umd.edu", days,  "Rash")
+    one_report(3, "user3@test.com", days,    "Cough,Chills")
     one_report(3, "user5@test.com", days,    "Cough")
