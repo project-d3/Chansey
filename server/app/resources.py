@@ -213,15 +213,20 @@ class HotspotSymptomsData(Resource):
                     buildings[building.name] = 1
 
         symptom_counts = {symptom.name:len(symptom.reports) for symptom in Symptom.query.all()}
-        sorted_symptoms = dict(sorted(symptom_counts.items(), key=lambda kv: kv[1]))
+        sorted_symptoms = dict(sorted(symptom_counts.items(), reverse = True, key=lambda kv: kv[1]))
 
         building_counts = {building.name:len(building.reports) for building in Building.query.all()}
-        sorted_buildings = dict(sorted(building_counts.items(), key=lambda kv: kv[1]))
-    
+        sorted_buildings = dict(sorted(building_counts.items(), reverse=True, key=lambda kv: kv[1]))
+        user_buildings = {}
+        for key, value in sorted_buildings.items():
+            if Building.query.filter_by(name=key).first():
+                if Building.query.filter_by(name=key).first().school_id == user.school_id:
+                    user_buildings[key] = value
+        print(user_buildings)
         return {
             'school': school,
             'symptoms': sorted_symptoms,
-            'buildings': sorted_buildings
+            'buildings': user_buildings
         }
 
 class TimeChartData(Resource):
