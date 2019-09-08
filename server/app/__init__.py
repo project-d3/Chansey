@@ -23,3 +23,5 @@ def check_if_token_in_blacklist(decrypted_token):
 from app import routes
 
 from app import resources
+
+from app import notifier
