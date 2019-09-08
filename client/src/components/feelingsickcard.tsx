@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 
 const Card = styled("div")`
   background: #f7a9a8;
@@ -22,7 +23,7 @@ const Message = styled("p")`
   font-weight: bold;
 `;
 
-const ButtonDiv = styled(Link)`
+const ButtonDiv = styled("div")`
   background: #feffe8;
   margin-bottom: 5vh;
   border-radius: 25px;
@@ -42,18 +43,20 @@ const ButtonText = styled("p")`
   margin: 5vh 5vw;
 `;
 
-interface viewfunc {
-  view: any;
-}
+export default class FeelingSickCard extends React.Component<
+  { funct: any },
+  { email: any }
+> {
+  constructor(props) {
+    super(props);
+  }
 
-export default class FeelingSickCard extends React.Component<viewfunc> {
   render() {
     return (
       <>
         <Card>
           <Message>Feeling sick?</Message>
-          {/* <ButtonDiv onClick={this.props.view}> */}
-          <ButtonDiv to="/symptomform">
+          <ButtonDiv onClick={this.props.funct}>
             <ButtonText>YES</ButtonText>
           </ButtonDiv>
         </Card>

@@ -16,6 +16,7 @@ const EnterAge = styled("input")`
   font-size: 2vw;
   background: #feffe8;
   color: #464655;
+  width: 10%;
 `;
 
 const AgeText = styled("p")`
@@ -26,12 +27,26 @@ const AgeText = styled("p")`
   font-weight: bold;
 `;
 
-export default class InsertSymptomAge extends React.Component {
+export default class InsertSymptomAge extends React.Component<{ funct: any }> {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.funct(Number(e.target.value));
+  }
   render() {
     return (
       <>
         <AgeWrapper>
-          <EnterAge type="number" min="0" max="99" step="1"></EnterAge>
+          <EnterAge
+            type="text"
+            pattern="[0-9][0-9]?"
+            id="counter"
+            onChange={this.handleChange}
+            maxlength="2"
+          ></EnterAge>
           <AgeText>Days Ago</AgeText>
         </AgeWrapper>
       </>

@@ -16,8 +16,8 @@ ReactDOM.render(
     <Switch>
       <Route exact path="/" component={LandingPage} />
       <Route path="/signup1" component={SignupPage1} />
-      <Route path="/signup2" component={SignupPage2} /> />
-      <Route path="/signin" component={SigninPage} /> />
+      <Route path="/signup2" component={SignupPage2} />
+      <Route path="/signin" component={SigninPage} />
       <Route path="/home" component={HomePage} />
       <Route path="/symptomform" component={SymptomFormPage} />
     </Switch>
