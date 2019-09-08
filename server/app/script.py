@@ -69,10 +69,10 @@ def make_users():
 #==================================================================================
 
 def make_reports():
-    school = 2
+    s = 2
     # 7 Days ago
     days = 7
-    new_report = Report(severity=severity, user_id=user_id, school_id=school, date=days)
+    new_report = Report(severity=severity, user_id=user_id, school_id=s, date=days)
     
     # 6 Days ago
     days = 6
