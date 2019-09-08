@@ -51,7 +51,9 @@ export default class Recents extends React.Component<{ symptoms: any }> {
       if (i < 8) {
         returnArr.push(
           <Symptom>
-            <SymptomText>{symptom}</SymptomText>
+            <SymptomText>
+              {symptom} -- {this.props.symptoms[symptom]}
+            </SymptomText>
           </Symptom>
         );
         i++;
