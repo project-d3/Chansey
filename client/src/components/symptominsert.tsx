@@ -22,7 +22,9 @@ const Title = styled("p")`
   font-weight: bold;
 `;
 
-const SymptomDropdown = styled("select")``;
+const SymptomDropdown = styled("select")`
+  width: 2%;
+`;
 const SymptomOption = styled("option")``;
 
 export default class SymptomInsert extends React.Component {
@@ -39,7 +41,7 @@ export default class SymptomInsert extends React.Component {
         <Wrapper>
           <Title>Symptoms</Title>
           <SymptomDropdown>
-            <SymptomOption></SymptomOption>
+            <SymptomOption value="None">---</SymptomOption>
           </SymptomDropdown>
         </Wrapper>
       </>
