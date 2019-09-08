@@ -141,7 +141,7 @@ class SubmitReport(Resource):
                 'status': False
             }
         school = school.id
-        date = datetime.today() - datetime.timedelta(days=date)
+        date = datetime.today() - timedelta(days=date)
         # instantiate report from variables
         new_report = Report(severity=severity, user_id=user_id, school_id=school, date=date)
 
@@ -149,7 +149,6 @@ class SubmitReport(Resource):
         new_report.symptoms = []
         new_report.buildings = []
         print(symptoms)
-        symptoms = symptoms.split(",")
         for symptom in symptoms:
             s = Symptom.query.filter_by(name=symptom).first()
             if s:

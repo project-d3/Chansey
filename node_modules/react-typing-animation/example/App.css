@@ -1,0 +1,80 @@
+.page {
+  font-family: Rubik, sans-serif;
+  background: url('./public/img/handsTyping.svg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  & > * {
+    color: #f9f9f9;
+  }
+}
+
+.title {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & > h1 {
+    width: 550px;
+    position: relative;
+
+    & > a {
+      color: #f9f9f9;
+      text-decoration: none;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+      font-size: 3rem;
+      cursor: pointer;
+    }
+
+    & > .dependencies {
+      width: 200px;
+      font-family: 'Gloria Hallelujah', cursive;
+      text-shadow: none;
+      font-size: 1.25rem;
+      color: palegreen;
+      position: absolute;
+      top: -5px;
+      left: calc(100% + 15px);
+    }
+  }
+}
+
+.features {
+  height: calc(100% - 100px);
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  & > ul > li {
+    padding: 5px 0;
+  }
+}
+
+.checkmark {
+  padding-right: 10px;
+  color: palegreen;
+}
+
+.styledSpan {
+  color: black;
+  text-shadow: 0 0 3px #0e303f;
+}
+
+.table {
+  display: inline-block;
+
+  & > tbody > tr {
+    display: inline-block;
+  }
+}

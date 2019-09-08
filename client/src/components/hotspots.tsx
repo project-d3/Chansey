@@ -54,19 +54,19 @@ export default class Hotspots extends React.Component {
           <HotTitle>Campus Hotspots</HotTitle>
           <BuildingWrapper>
             <Building>
-              <BuildingText>Royce Hall</BuildingText>
+              <BuildingText>Denton Hall</BuildingText>
             </Building>
             <Building>
-              <BuildingText>Ackerman Union</BuildingText>
+              <BuildingText>Wicomico Hall</BuildingText>
             </Building>
             <Building>
-              <BuildingText>Powell Library</BuildingText>
+              <BuildingText>South Diner</BuildingText>
             </Building>
             <Building>
-              <BuildingText>Hedrick Hall</BuildingText>
+              <BuildingText>Brendan Iribe Center</BuildingText>
             </Building>
             <Building>
-              <BuildingText>Rieber Hall</BuildingText>
+              <BuildingText>Stamp Student Union</BuildingText>
             </Building>
           </BuildingWrapper>
         </HotWrapper>
