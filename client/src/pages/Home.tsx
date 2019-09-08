@@ -21,7 +21,7 @@ const Content = styled("div")`
 const RightWrapper = styled("div")`
   display: flex;
   flex-direction: column;
-  width: 55%;
+  width: 50%;
   margin-right: auto;
   margin-left: auto;
   margin-top: 10vh;
@@ -45,9 +45,12 @@ export default class HomePage extends React.Component<RouteComponentProps> {
     return (
       <>
         <Page>
-          <TempNavBar />
+          <TempNavBar {...this.props} />
           <Content>
-            <FeelingSickCard funct={this.handleToForm}></FeelingSickCard>
+            <FeelingSickCard
+              funct={this.handleToForm}
+              {...this.props}
+            ></FeelingSickCard>
             <RightWrapper>
               <Hotspots {...this.props}></Hotspots>
               <Recents {...this.props}></Recents>

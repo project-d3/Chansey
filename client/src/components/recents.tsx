@@ -24,7 +24,6 @@ const SymptomWrapper = styled("div")`
 
 const Symptom = styled("div")`
   border: 4px solid #c4a29e;
-  border-radius: 30px;
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 2vh;
