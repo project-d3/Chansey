@@ -24,20 +24,18 @@ const ChanseyDiv = styled("div")`
 `;
 
 const SloganDiv = styled("div")`
-  /* background: #c4a29e; */
   display: flex;
   justify-content: flex-start;
-  align-items: center;
   z-index: 2;
-  opacity: 0.6;
-  width: 55%;
+  width: 52%;
   position: relative;
   right: 2vw;
   top: 10vh;
+  height: 40%;
 `;
 
 const SloganText = styled(Typing)`
-  color: #c4a29e;
+  color: #f7a9a8;
   padding: 5vw;
   font-family: "Quicksand", sans-serif;
   font-size: 4vw;
@@ -54,7 +52,7 @@ export default class LandingPage extends React.Component {
           <SloganDiv>
             <SloganText loop={true} speed={60} startDelay={20}>
               <span>Detect diseases on campus</span>
-              <Typing.Backspace count={25} delay={1500} speed={-10} />
+              <Typing.Backspace count={27} delay={1500} speed={-10} />
               <span>Get alerts of new outbreaks</span>
               <Typing.Backspace count={30} delay={1500} speed={-10} />
               <span>Keep track of your symptoms</span>
@@ -62,7 +60,7 @@ export default class LandingPage extends React.Component {
               <span>View trends in illnesses</span>
               <Typing.Backspace count={28} delay={1500} speed={-10} />
               <span>Avoid contaminated spaces</span>
-              <Typing.Backspace count={25} delay={1500} speed={-10} />
+              <Typing.Backspace count={27} delay={1500} speed={-10} />
             </SloganText>
           </SloganDiv>
         </Page>
