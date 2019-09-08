@@ -118,7 +118,7 @@ export default class SignupForm2 extends React.Component<
 
   componentWillMount() {
     this.setState({
-      university: "University of Maryland"
+      university: "University of California, Los Angeles"
     });
   }
 
@@ -133,7 +133,9 @@ export default class SignupForm2 extends React.Component<
       return uclabuildings["buildings"].map(building => (
         <Option value={building}>{building}</Option>
       ));
-    } else if (this.state.university === "University of Maryland") {
+    } else if (
+      this.state.university === "University of Maryland, College Park"
+    ) {
       return umdbuildings["buildings"].map(building => (
         <Option value={building}>{building}</Option>
       ));

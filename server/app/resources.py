@@ -125,6 +125,7 @@ class SubmitReport(Resource):
         date = data['date'] # expected format for date: int
         email = data['email']
         symptoms = data['symptoms']
+        symptoms = symptoms.split(",")
         # converting raw data into variables to instantiate Report
         user = User.query.filter_by(email=email).first()
         if not user:
@@ -140,7 +141,7 @@ class SubmitReport(Resource):
                 'status': False
             }
         school = school.id
-        date = datetime.today() - timedelta(days=date)
+        date = datetime.today() - datetime.timedelta(days=date)
         # instantiate report from variables
         new_report = Report(severity=severity, user_id=user_id, school_id=school, date=date)
 
@@ -239,7 +240,9 @@ class UserAdditionalInformation(Resource):
         try:
             buildings = data['buildings'].split(',')
             for b in buildings:
-                user.buildings.append(Building.query.filter_by(name=b).first())
+                b = Building.query.filter_by(name=b).first()
+                if b:
+                    user.buildings.append(b)
             db.session.add(user)
             db.session.commit()
             return {

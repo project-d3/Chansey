@@ -26,7 +26,10 @@ const Slider = styled("div")`
   margin-bottom: 5vh;
 `;
 
-export default class Severity extends React.Component<{}, { show: Number }> {
+export default class Severity extends React.Component<
+  { funct: any },
+  { show: Number }
+> {
   constructor(props) {
     super(props);
     this.changeVal = this.changeVal.bind(this);
@@ -57,6 +60,7 @@ export default class Severity extends React.Component<{}, { show: Number }> {
     this.setState({
       show: e.target.dataset.val
     });
+    this.props.funct(e.target.dataset.val);
   }
   render() {
     return (
