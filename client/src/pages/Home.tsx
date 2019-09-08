@@ -15,6 +15,7 @@ const Page = styled("div")`
 const Content = styled("div")`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const RightWrapper = styled("div")`
@@ -23,6 +24,7 @@ const RightWrapper = styled("div")`
   width: 55%;
   margin-right: auto;
   margin-left: auto;
+  margin-top: 10vh;
 `;
 
 export default class HomePage extends React.Component<RouteComponentProps> {
