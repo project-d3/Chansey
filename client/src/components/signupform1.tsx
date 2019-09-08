@@ -108,7 +108,7 @@ export default class SignupForm1 extends React.Component<
         console.log(response.data["message"]);
         if (response.data["status"] == true) {
           this.props.history.push({
-            pathname: "/home",
+            pathname: "/signup2",
             state: { email: this.state.email }
           });
         }

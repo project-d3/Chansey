@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { RouteComponentProps } from "react-router-dom";
 import Schooldropdown from "./schooldropdown";
-import BuildingDrop from "./buildingdropdown";
 import axios from "axios";
 
 const Form = styled("form")`
@@ -90,29 +89,27 @@ export default class SignupForm2 extends React.Component<
     this.renderOptions = this.renderOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.buildingChange = this.buildingChange.bind(this);
+    this.buildingChange1 = this.buildingChange1.bind(this);
+    this.buildingChange2 = this.buildingChange2.bind(this);
+    this.buildingChange3 = this.buildingChange3.bind(this);
+    this.buildingChange4 = this.buildingChange4.bind(this);
   }
 
-  handleSubmit() {
-    var buildingstring =
-      this.state.B0 +
-      "," +
-      this.state.B1 +
-      "," +
-      this.state.B2 +
-      "," +
-      this.state.B3 +
-      "," +
-      this.state.B4;
+  handleSubmit(e) {
+    e.preventDefault();
+    var buildingstring = `${this.state.B0},${this.state.B1},${this.state.B2},${this.state.B3},${this.state.B4}`;
+    console.log(buildingstring.toString(), this.props.location.state.email);
     axios
-      .post("/api/registration", {
+      .post("/api/additional_info_form", {
         email: this.props.location.state.email,
-        buildings: buildingstring
+        buildings: buildingstring.toString(),
+        school: this.state.university
       })
       .then(response => {
         console.log(response.data["message"]);
         if (response.data["status"] == true) {
           this.props.history.push({
-            pathname: "/signup2",
+            pathname: "/home",
             state: { email: this.props.location.state.email }
           });
         }
@@ -121,12 +118,7 @@ export default class SignupForm2 extends React.Component<
 
   componentWillMount() {
     this.setState({
-      university: "University of Maryland",
-      B0: "Brendan Irbe Center",
-      B1: "Brendan Irbe Center",
-      B2: "Brendan Irbe Center",
-      B3: "Brendan Irbe Center",
-      B4: "Brendan Irbe Center"
+      university: "University of Maryland"
     });
   }
 
@@ -137,7 +129,7 @@ export default class SignupForm2 extends React.Component<
   }
 
   renderOptions() {
-    if (this.state.university === "University of California: Los Angeles") {
+    if (this.state.university === "University of California, Los Angeles") {
       return uclabuildings["buildings"].map(building => (
         <Option value={building}>{building}</Option>
       ));
@@ -153,25 +145,33 @@ export default class SignupForm2 extends React.Component<
   }
 
   buildingChange(e) {
-    switch (e.target.dataset.building) {
-      case 0:
-        this.setState({ B0: e.target.value });
-        break;
-      case 1:
-        this.setState({ B1: e.target.value });
-        break;
-      case 2:
-        this.setState({ B2: e.target.value });
-        break;
-      case 3:
-        this.setState({ B3: e.target.value });
-        break;
-      case 4:
-        this.setState({ B4: e.target.value });
-        break;
-      default:
-        break;
-    }
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B0: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange1(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B1: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange2(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B2: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange3(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B3: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange4(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B4: e.target.value });
+    console.log(this.state);
   }
 
   render() {
@@ -185,19 +185,19 @@ export default class SignupForm2 extends React.Component<
             </Section>
             <Section>
               <SectionTitle>Top 5 most visited buildings</SectionTitle>
-              <Choose data-building={0} onChange={this.buildingChange}>
+              <Choose data-val={0} onChange={this.buildingChange}>
                 {this.renderOptions()}
               </Choose>
-              <Choose data-building={1} onChange={this.buildingChange}>
+              <Choose data-val={1} onChange={this.buildingChange1}>
                 {this.renderOptions()}
               </Choose>
-              <Choose data-building={2} onChange={this.buildingChange}>
+              <Choose data-val={2} onChange={this.buildingChange2}>
                 {this.renderOptions()}
               </Choose>
-              <Choose data-building={3} onChange={this.buildingChange}>
+              <Choose data-val={3} onChange={this.buildingChange3}>
                 {this.renderOptions()}
               </Choose>
-              <Choose data-building={4} onChange={this.buildingChange}>
+              <Choose data-val={4} onChange={this.buildingChange4}>
                 {this.renderOptions()}
               </Choose>
             </Section>
