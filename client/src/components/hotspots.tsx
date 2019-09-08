@@ -7,6 +7,8 @@ const HotWrapper = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 4px solid #c4a29e;
+  padding-bottom: 2px;
 `;
 
 const HotTitle = styled("p")`
@@ -45,30 +47,21 @@ export default class Hotspots extends React.Component<{ buildings: any }> {
   }
 
   renderHotspots() {
-    var renderArr = [];
-    var numToRender = 6;
-    var numArry = [];
-    for (var num in this.props.buildings) {
-      if (num in numArry) {
-        continue;
-      }
-      numArry.push(num);
-    }
-    numArry.sort();
-    while (numToRender >= 0) {
-      var max = numArry.pop();
-      var i = 0;
-      while (max in numArry && numToRender >= 0) {
-        renderArr.push(
+    var returnArr = [];
+    var i = 0;
+    for (var building in this.props.buildings) {
+      if (i < 6) {
+        returnArr.push(
           <Building>
-            <BuildingText>{this.props.buildings[max][i]}</BuildingText>
+            <BuildingText>
+              {building} -- {this.props.buildings[building]}
+            </BuildingText>
           </Building>
         );
         i++;
-        numToRender--;
       }
     }
-    return renderArr;
+    return returnArr;
   }
 
   render() {

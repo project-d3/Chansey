@@ -1,19 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
 
 const Card = styled("div")`
   background: #f7a9a8;
   width: 40%;
-  height: 70%;
+  height: 90%;
   font-family: "Comfortaa", cursive;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 5vw;
-  margin-top: 15vh;
+  margin-top: 3vh;
   border-radius: 20px;
 `;
 
@@ -21,12 +20,12 @@ const Message = styled("p")`
   color: #464655;
   font-size: 4vw;
   font-weight: bold;
-  margin-top: 2vh;
+  margin-top: 3vh;
+  margin-bottom: 5vh;
 `;
 
 const ButtonDiv = styled("div")`
   background: #feffe8;
-  margin-bottom: 2vh;
   color: #c4a29e;
   transition: 0.3s;
   text-decoration: none;
@@ -49,14 +48,14 @@ const OrText = styled("p")`
   text-transform: uppercase;
   color: #feffe8;
   font-weight: bold;
-  font-size: 2vw;
-  margin-bottom: 2vh;
-  margin-top: 2vh;
+  font-size: 3vw;
+  margin-bottom: 5vh;
+  margin-top: 5vh;
 `;
 
 const ToCharts = styled("div")`
   background: #feffe8;
-  margin-bottom: 4vh;
+  margin-bottom: 6vh;
   color: #c4a29e;
   transition: 0.3s;
   text-decoration: none;

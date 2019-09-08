@@ -6,6 +6,7 @@ const RecentWrapper = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 2px;
 `;
 
 const RecentTitle = styled("p")`
@@ -40,33 +41,23 @@ const SymptomText = styled("p")`
 export default class Recents extends React.Component<{ symptoms: any }> {
   constructor(props) {
     super(props);
+    this.renderRecents = this.renderRecents.bind(this);
   }
 
   renderRecents() {
-    var renderArr = [];
-    var numToRender = 8;
-    var numArry = [];
-    for (var num in this.props.symptoms) {
-      if (num in numArry) {
-        continue;
-      }
-      numArry.push(num);
-    }
-    numArry.sort();
-    while (numToRender >= 0) {
-      var max = numArry.pop();
-      var i = 0;
-      while (max in numArry && numToRender >= 0) {
-        renderArr.push(
+    var returnArr = [];
+    var i = 0;
+    for (var symptom in this.props.symptoms) {
+      if (i < 8) {
+        returnArr.push(
           <Symptom>
-            <SymptomText>{this.props.symptoms[max][i]}</SymptomText>
+            <SymptomText>{symptom}</SymptomText>
           </Symptom>
         );
         i++;
-        numToRender--;
       }
     }
-    return renderArr;
+    return returnArr;
   }
   render() {
     return (

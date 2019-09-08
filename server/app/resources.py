@@ -1,3 +1,4 @@
+import operator
 from flask_restful import Resource, reqparse
 from app import api
 from .models import User, Report, Symptom, Building, School
@@ -186,7 +187,7 @@ class SubmitReport(Resource):
         
 # get endpoints to get data for different pages       
 class HotspotSymptomsData(Resource):
-    def get(self):
+    def post(self):
         data = home_data_parser.parse_args()
         user = User.query.filter_by(email=data['email']).first()
         if not user:
@@ -209,10 +210,16 @@ class HotspotSymptomsData(Resource):
                 else:
                     buildings[building.name] = 1
 
+        symptom_counts = {symptom.name:len(symptom.reports) for symptom in Symptom.query.all()}
+        sorted_symptoms = dict(sorted(symptom_counts.items(), key=lambda kv: kv[1]))
+
+        building_counts = {building.name:len(building.reports) for building in Building.query.all()}
+        sorted_buildings = dict(sorted(building_counts.items(), key=lambda kv: kv[1]))
+    
         return {
             'school': school,
-            'symptoms': symptoms,
-            'buildings': buildings
+            'symptoms': sorted_symptoms,
+            'buildings': sorted_buildings
         }
 
 class TimeChartData(Resource):

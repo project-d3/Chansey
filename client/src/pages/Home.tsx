@@ -25,7 +25,7 @@ const RightWrapper = styled("div")`
   width: 50%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 10vh;
+  margin-top: 0vh;
 `;
 
 export default class HomePage extends React.Component<
@@ -58,25 +58,10 @@ export default class HomePage extends React.Component<
         email: this.props.location.state.email
       })
       .then(res => {
-        var buildingnum = {};
-        for (var building in res.data["buildings"]) {
-          if (res.data["buildings"][building] in buildingnum) {
-            buildingnum[res.data["buildings"][building]].push(building);
-          } else {
-            buildingnum[res.data["buildings"][building]] = [building];
-          }
-        }
-        this.setState({ buildings: buildingnum });
-
-        var symptomnum = {};
-        for (var symptom in res.data["symptoms"]) {
-          if (res.data["symptoms"][symptom] in symptomnum) {
-            symptomnum[res.data["symptoms"][symptom]].push(symptom);
-          } else {
-            symptomnum[res.data["symptoms"][symptom]] = [symptom];
-          }
-        }
-        this.setState({ symptoms: symptomnum });
+        this.setState({
+          buildings: res.data["buildings"],
+          symptoms: res.data["symptoms"]
+        });
       });
   }
 
