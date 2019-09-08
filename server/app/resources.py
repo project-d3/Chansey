@@ -9,6 +9,11 @@ from datetime import datetime, timedelta
 ''' 
 START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
 '''
+
+# parse for numbers
+number_parser = reqparse.RequestParser()
+number_parser.add_argument('email', help = 'This field cannot be blank', required = True)
+
 # parser for getting homepage data
 home_data_parser = reqparse.RequestParser()
 home_data_parser.add_argument('email', help = 'This field cannot be blank', required = True)
@@ -53,6 +58,17 @@ additional_info_parser.add_argument('buildings', help = 'This field cannot be bl
 '''
 END OF ARG PARSER SECTION
 '''
+
+# numbers for charts
+
+class ChartNumbers(Resource):
+    def get(self):
+        data = number_parser.parse_args()
+        user = User.query.filter_by(email = data['email']).first()
+        user_numbers = len(user.reports)
+        total_numbers = Report.query.count()
+        return {"user_numbers": user_numbers, "total_numbers":total_numbers}
+
 
 # adding new schools/buildings (and symptoms if necessary?)
 

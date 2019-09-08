@@ -50,21 +50,26 @@ interface auth {
   loggedin: Boolean;
 }
 
+const buttons = (props) => {
+  return (
+  <LinksDiv {...props}>
+    <NavLink to="/signup1">
+      <NavText>Sign up</NavText>
+    </NavLink>
+    <NavLink to="/signin">
+      <NavText>Sign in</NavText>
+    </NavLink>
+  </LinksDiv>);
+}
+
 export default class NavBar extends React.Component<auth> {
   render() {
     return (
       <>
         <NavWrapper>
-          <Title authen={true}>Chansey</Title>
-          <LinksDiv>
-            <NavLink to="/signup1">
-              <NavText>Sign up</NavText>
-            </NavLink>
-            <NavLink to="/signin">
-              <NavText>Sign in</NavText>
-            </NavLink>
-          </LinksDiv>
+          <Link to="/"><Title authen={true}>Chansey</Title></Link>
         </NavWrapper>
+        {!this.props.loggedin ? [] : buttons}
       </>
     );
   }
