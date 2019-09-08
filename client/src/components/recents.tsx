@@ -6,6 +6,7 @@ const RecentWrapper = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 2px;
 `;
 
 const RecentTitle = styled("p")`
@@ -37,32 +38,35 @@ const SymptomText = styled("p")`
   font-weight: bold;
 `;
 
-export default class Recents extends React.Component {
+export default class Recents extends React.Component<{ symptoms: any }> {
+  constructor(props) {
+    super(props);
+    this.renderRecents = this.renderRecents.bind(this);
+  }
+
+  renderRecents() {
+    var returnArr = [];
+    var i = 0;
+    for (var symptom in this.props.symptoms) {
+      if (i < 8) {
+        returnArr.push(
+          <Symptom>
+            <SymptomText>
+              {symptom} -- {this.props.symptoms[symptom]}
+            </SymptomText>
+          </Symptom>
+        );
+        i++;
+      }
+    }
+    return returnArr;
+  }
   render() {
     return (
       <>
         <RecentWrapper>
           <RecentTitle>Recent Symptoms</RecentTitle>
-          <SymptomWrapper>
-            <Symptom>
-              <SymptomText>Cough</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Headache</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Nausea</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Rash</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Chills</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Sneezing</SymptomText>
-            </Symptom>
-          </SymptomWrapper>
+          <SymptomWrapper>{this.renderRecents()}</SymptomWrapper>
         </RecentWrapper>
       </>
     );

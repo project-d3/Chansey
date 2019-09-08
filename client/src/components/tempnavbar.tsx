@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 const NavWrapper = styled("div")`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
   background: #f7a9a8;
   font-family: "Comfortaa", sans-serif;
@@ -19,6 +19,14 @@ const TitleWrap = styled("div")`
 `;
 const Title = styled("p")`
   font-size: 3vw;
+  color: #464655;
+  font-weight: bold;
+  margin: 2.5vh 4vw;
+  letter-spacing: 0.1em;
+`;
+
+const EmailText = styled("p")`
+  font-size: 2.5vw;
   color: #464655;
   font-weight: bold;
   margin: 2.5vh 4vw;
@@ -46,6 +54,7 @@ export default class TempNavBar extends React.Component<RouteComponentProps> {
           <TitleWrap onClick={this.handleToHome}>
             <Title>Chansey</Title>
           </TitleWrap>
+          <EmailText>{this.props.location.state.email}</EmailText>
         </NavWrapper>
       </>
     );
