@@ -103,7 +103,7 @@ class Bar extends Component {
 
     render() {
         return(
-            <Card style={this.props.style}>
+            <Card style={this.props.style} {...this.props}>
                 <CardTitle className="text-center mt-3">
                     <h4>Bar Chart Breakdown of {this.get_dropdown()}</h4>
                 </CardTitle>
