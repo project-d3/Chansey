@@ -11,6 +11,7 @@ import re
 @app.route('/home')
 @app.route('/signup2')
 @app.route('/symptomform')
+@app.route('/charts')
 def index():
     return render_template('index.html')
 
@@ -38,3 +39,6 @@ api.add_resource(UserLogoutAccess, '/api/logout/access')
 api.add_resource(UserLogoutRefresh, '/api/logout/refresh')
 api.add_resource(TokenRefresh, '/api/token/refresh')
 api.add_resource(UserAdditionalInformation, '/api/additional_info_form')
+
+# number endpoint
+api.add_resource(ChartNumbers, '/api/chart_numbers')

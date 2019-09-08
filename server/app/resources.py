@@ -9,6 +9,11 @@ from datetime import datetime, timedelta
 ''' 
 START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
 '''
+
+# parse for numbers
+number_parser = reqparse.RequestParser()
+number_parser.add_argument('email', help = 'This field cannot be blank', required = True)
+
 # parser for getting homepage data
 home_data_parser = reqparse.RequestParser()
 home_data_parser.add_argument('email', help = 'This field cannot be blank', required = True)
@@ -53,6 +58,17 @@ additional_info_parser.add_argument('buildings', help = 'This field cannot be bl
 '''
 END OF ARG PARSER SECTION
 '''
+
+# numbers for charts
+
+class ChartNumbers(Resource):
+    def get(self):
+        data = number_parser.parse_args()
+        user = User.query.filter_by(email = data['email']).first()
+        user_numbers = len(user.reports)
+        total_numbers = Report.query.count()
+        return {"user_numbers": user_numbers, "total_numbers":total_numbers}
+
 
 # adding new schools/buildings (and symptoms if necessary?)
 
@@ -125,7 +141,6 @@ class SubmitReport(Resource):
         date = data['date'] # expected format for date: int
         email = data['email']
         symptoms = data['symptoms']
-        symptoms = symptoms.split(",")
         # converting raw data into variables to instantiate Report
         user = User.query.filter_by(email=email).first()
         if not user:
@@ -141,7 +156,7 @@ class SubmitReport(Resource):
                 'status': False
             }
         school = school.id
-        date = datetime.today() - datetime.timedelta(days=date)
+        date = datetime.today() - timedelta(days=date)
         # instantiate report from variables
         new_report = Report(severity=severity, user_id=user_id, school_id=school, date=date)
 
@@ -240,9 +255,7 @@ class UserAdditionalInformation(Resource):
         try:
             buildings = data['buildings'].split(',')
             for b in buildings:
-                b = Building.query.filter_by(name=b).first()
-                if b:
-                    user.buildings.append(b)
+                user.buildings.append(Building.query.filter_by(name=b).first())
             db.session.add(user)
             db.session.commit()
             return {

@@ -5,10 +5,13 @@ import {
     Row
 } from 'reactstrap';
 
-import Doughnut from './charts/Doughnut';
-import Line from './charts/Line';
-import Radar from './charts/Radar';
-import Bar from './charts/Bar';
+import Doughnut from '../charts/Doughnut';
+import Line from '../charts/Line';
+import Radar from '../charts/Radar';
+import Bar from '../charts/Bar';
+import Numbers from '../charts/Numbers';
+
+import NavBar from '../components/navbar';
 
 //The data for a bar and a doughnut graph can actually be graphed exactly the same way
 const building_array_doughnut_bar = [
@@ -56,20 +59,27 @@ const building_array_radar = ["Building 1", "Building 2", "Building 3", "Buildin
 
 class Charts extends Component {
 
+    constructor(props) {
+      super(props);
+    }
+
     componentDidMount() {
         document.body.style.backgroundColor = "#C4829E";
     }
 
 
+
     render() {
         return(
+            [<NavBar/>,
             <Container fluid>
                 <Row className="m-3 p-3">
-                    <Col lg="6">
+                    <Col lg="9">
                         <Line style={{height:"100%", backgroundColor: "#FEFFE8"}} building_array={building_array_line}></Line>
                     </Col>
-                    <Col lg="6">
-                        <Bar style={{height:"100%", backgroundColor: "#FEFFE8"}}  building_array={building_array_doughnut_bar}></Bar>
+                    <Col lg="3" className="mt-3 mb-3 pt-3 pb-3">
+                        <Bar style={{height:"50%", backgroundColor: "#FEFFE8"}} className="mb-5"  building_array={building_array_doughnut_bar}></Bar>
+                        <Numbers style={{height:"40%", backgroundColor: "#FEFFE8"}} className="mt-5"/>
                     </Col>
                 </Row>
                 <Row className="m-3 p-3">
@@ -80,7 +90,9 @@ class Charts extends Component {
                         <Doughnut style={{height:"100%", backgroundColor: "#FEFFE8"}} building_array={building_array_doughnut_bar}></Doughnut>
                     </Col>
                 </Row>
-            </Container>
+                <Row>
+                </Row>
+            </Container>]
         );
     }
 }
