@@ -39,6 +39,7 @@ const NavLink = styled(Link)`
   &:hover {
     background: #464655;
     color: #f7a9a8;
+    text-decoration: none;
   }
 `;
 
