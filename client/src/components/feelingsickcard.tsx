@@ -14,7 +14,7 @@ const Card = styled("div")`
   align-items: center;
   margin-left: 5vw;
   margin-top: 15vh;
-  border-radius: 60px;
+  border-radius: 20px;
 `;
 
 const Message = styled("p")`

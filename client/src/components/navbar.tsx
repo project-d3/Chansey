@@ -33,7 +33,6 @@ const NavLink = styled(Link)`
   text-decoration: none;
   text-align: center;
   color: #464655;
-  height: 100%;
   padding-left: 1.5vw;
   padding-right: 1.5vw;
   &:hover {
@@ -45,6 +44,10 @@ const NavLink = styled(Link)`
 
 const NavText = styled("p")`
   font-size: 2vw;
+  margin: auto;
+  height: 100%;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
 `;
 
 interface auth {
