@@ -36,19 +36,33 @@ def make_buildings():
 
 def make_users():
     users = {
-        "Dhanvee Ivaturi":  ("dhanvee@umd.edu", 2),
-        "Henry Trinh":      ("thenry3@g.ucla.edu", 1),
-        "Nikolay Pomytkin": ("pomytkin@umd.edu", 2),
-        "Ryan Mao":         ("rym15@scarletmail.rutgers.edu", 3),
-        "User One":         ("user1@test.com", 2),
-        "User Two":         ("user2test.com", 2),
-        "User Three":       ("user3@test.com", 2),
-        "User Four":        ("user4@test.com", 2),
-        "User Five":        ("user5@test.com", 2)
+        "Henry Trinh":
+            ("thenry3@g.ucla.edu", 1, ["Sproul Hall","Engineering VI","Geology Building","Dodd Hall","Botany Building"]),
+        "Ryan Mao":
+            ("rym15@scarletmail.rutgers.edu", 3, ["The Quadrangle","The Radian","George A.  Weiss Pavilion","Jon M. Huntsman Hall","Claudia Cohen Hall"]),
+        "Nikolay Pomytkin":
+            ("pomytkin@umd.edu", 2, ["Oakland Hall","251 North","Jeong H. Kim Engineering Building","Computer Science Instructional Center","Prince Frederick Hall"]),
+        "Dhanvee Ivaturi":
+            ("dhanvee@umd.edu", 2, ["Oakland Hall","251 North","Brendan Iribe Center","Denton Hall","Wicomico Hall"]),
+        "User One":
+            ("user1@test.com", 2, ["Denton Hall","251 North","Adele H. Stamp Student Union","Brendan Iribe Center","A. V. Williams Building"]),
+        "User Two":
+            ("user2test.com", 2, ["Denton Hall","The North Diner","Brendan Iribe Center","Adele H. Stamp Student Union","Xfinity Center"]),
+        "User Three":
+            ("user3@test.com", 2, ["Cumberland Hall","The North Diner","Adele H. Stamp Student Union","Edward St. John Building","Denton Hall"]),
+        "User Four":
+            ("user4@test.com", 2, ["Cumberland Hall","The South Diner","Adele H. Stamp Student Union","Edward St. John Building","Denton Hall"]),
+        "User Five":
+            ("user5@test.com", 2, ["Wicomico Hall","The South Diner","Adele H. Stamp Student Union","Denton Hall","Edward St. John Building"]),
     }
 
     for name, email in users.items():
         u = User(name = name, email = email[0], password = User.generate_hash('password'), school_id=email[1])
+
+        for bldg in email[2]:
+            for b in Building.query.filter_by(name=bldg):
+                u.buildings.append(b)
+
         db.session.add(u)
         db.session.commit()
 
