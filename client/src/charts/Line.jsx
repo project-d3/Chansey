@@ -13,44 +13,25 @@ import {
     CardTitle
 } from 'reactstrap';
 
-const labels = ["Week 0", "Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7", "Week 8", "Week 9"];
+const labels = ["Day 0", "Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
 
 class Line extends Component {
 
     constructor(props) {
         super(props);
         this.chartRef = React.createRef();
-        
+
         this.state = {
-            dropdownOpen: false,
-            building: 0
+            symptoms_array: []
         }
-        
-        this.toggle = this.toggle.bind(this);
-
-        this.change_building = this.change_building.bind(this);
     }
-
-    toggle() {
-        this.setState(prevState => ({
-          dropdownOpen: !prevState.dropdownOpen
-        }));
-    }
-
-
 
     componentDidMount() {
         this.myChart = new Chart(this.chartRef.current, {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: "Symptoms Count",
-                    data: this.props.building_array[this.state.building].values,
-                    borderColor: theme[0],
-                    backgroundColor: theme[0] + "80",
-                    fill: false
-                }]
+                datasets: [],
             },
             options: {
                 tooltips: {
@@ -67,47 +48,44 @@ class Line extends Component {
                 }
             }
         });
+        this.update_chart();
     }
 
-    change_building = (event) => {
-        let building_number = event.target.value;
-        this.setState({
-            building: building_number
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.symptoms_array)
+        if (nextProps.symptoms_array.length === null) {
+            return;
+        }
+        console.log('here');
+        for (let i = 0; i < nextProps.symptoms_array.length; i++) {
+            if (this.state.symptoms_array.length === 0 || (JSON.stringify(this.state.symptoms_array[i]) != JSON.stringify(nextProps.symptoms_array[i]))) {
+                this.setState({symptoms_array: nextProps.symptoms_array});
+                setTimeout(this.update_chart,3000);
+                return;
+            }
+        }
+    }
+
+    update_chart = () => {
+        // if (this.state.symptoms_array === null) return;
+        let i = 0;
+        this.myChart.data.datasets = [];
+        this.state.symptoms_array.forEach(symptom => {
+            this.myChart.data.datasets.push({
+                label: symptom.name,
+                data: symptom.values,
+                borderColor: theme[i % 4]
+            });
+            i++;
         })
-        let building = this.props.building_array[building_number];
-        this.myChart.data.datasets[0].data = building.values;
         this.myChart.update();
     }
-
-    get_building_options = () => {
-        let building_options = [];
-        for (let i = 0; i < this.props.building_array.length; i++) {
-            building_options.push(
-               <DropdownItem key={i} value={i} onClick={this.change_building}>{this.props.building_array[i].name}</DropdownItem> 
-            );
-        }
-        return building_options;
-    }
-    
-    get_dropdown = () => {
-        return( 
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                <DropdownToggle color="link" caret style={dropdown_style} className="btn-lg">
-                    {this.props.building_array[this.state.building].name}
-                </DropdownToggle>
-                <DropdownMenu>
-                    {this.get_building_options()}
-                </DropdownMenu>
-            </Dropdown>
-        );
-    }
-
 
     render() {
         return(
             <Card style={this.props.style}>
                 <CardTitle className="text-center mt-3">
-                    <h4>10 Week Record of Total Symptoms of {this.get_dropdown()}</h4>
+                    <h4>Common Symptoms Within the past {labels.length} Days</h4>
                 </CardTitle>
                 <CardBody>
                     <canvas ref={this.chartRef}></canvas>

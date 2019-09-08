@@ -12,6 +12,7 @@ import Bar from '../charts/Bar';
 import Numbers from '../charts/Numbers';
 
 import NavBar from '../components/navbar';
+import Axios from 'axios';
 
 //The data for a bar and a doughnut graph can actually be graphed exactly the same way
 const building_array_doughnut_bar = [
@@ -61,10 +62,24 @@ class Charts extends Component {
 
     constructor(props) {
       super(props);
+
+      this.state = {
+        chart_data: []
+      }
     }
 
     componentDidMount() {
         document.body.style.backgroundColor = "#C4829E";
+        this.update_chart_data();
+        setInterval(this.update_chart_data, 10000);
+    }
+
+    update_chart_data = () => {
+      Axios.get("/api/get_charts_data")
+        .then(res => {
+          const data = res.data;
+          this.setState({chart_data: data});
+        });
     }
 
 
@@ -75,7 +90,7 @@ class Charts extends Component {
             <Container fluid>
                 <Row className="m-3 p-3">
                     <Col lg="9">
-                        <Line style={{height:"100%", backgroundColor: "#FEFFE8"}} building_array={building_array_line}></Line>
+                      {this.state.chart_data != null ? <Line style={{height:"100%", backgroundColor: "#FEFFE8"}} symptoms_array={this.state.chart_data}></Line> : <p>Loading...</p> }
                     </Col>
                     <Col lg="3" className="mt-3 mb-3 pt-3 pb-3">
                         <Bar style={{height:"50%", backgroundColor: "#FEFFE8"}} className="mb-5"  building_array={building_array_doughnut_bar}></Bar>
