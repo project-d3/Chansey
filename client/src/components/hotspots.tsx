@@ -38,36 +38,45 @@ const BuildingText = styled("p")`
   font-weight: bold;
 `;
 
-export default class Hotspots extends React.Component {
+export default class Hotspots extends React.Component<{ buildings: any }> {
   constructor(props) {
     super(props);
     this.renderHotspots = this.renderHotspots.bind(this);
   }
+
   renderHotspots() {
-    axios.post("/api/get_home_data", {});
+    var renderArr = [];
+    var numToRender = 6;
+    var numArry = [];
+    for (var num in this.props.buildings) {
+      if (num in numArry) {
+        continue;
+      }
+      numArry.push(num);
+    }
+    numArry.sort();
+    while (numToRender >= 0) {
+      var max = numArry.pop();
+      var i = 0;
+      while (max in numArry && numToRender >= 0) {
+        renderArr.push(
+          <Building>
+            <BuildingText>{this.props.buildings[max][i]}</BuildingText>
+          </Building>
+        );
+        i++;
+        numToRender--;
+      }
+    }
+    return renderArr;
   }
+
   render() {
     return (
       <>
         <HotWrapper>
           <HotTitle>Campus Hotspots</HotTitle>
-          <BuildingWrapper>
-            <Building>
-              <BuildingText>Denton Hall</BuildingText>
-            </Building>
-            <Building>
-              <BuildingText>Wicomico Hall</BuildingText>
-            </Building>
-            <Building>
-              <BuildingText>South Diner</BuildingText>
-            </Building>
-            <Building>
-              <BuildingText>Brendan Iribe Center</BuildingText>
-            </Building>
-            <Building>
-              <BuildingText>Stamp Student Union</BuildingText>
-            </Building>
-          </BuildingWrapper>
+          <BuildingWrapper>{this.renderHotspots()}</BuildingWrapper>
         </HotWrapper>
       </>
     );

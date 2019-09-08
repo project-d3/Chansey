@@ -5,6 +5,7 @@ import FeelingSickCard from "../components/feelingsickcard";
 import Hotspots from "../components/hotspots";
 import Recents from "../components/recents";
 import { RouteComponentProps } from "react-router-dom";
+import axios from "axios";
 
 const Page = styled("div")`
   width: 100%;
@@ -27,7 +28,10 @@ const RightWrapper = styled("div")`
   margin-top: 10vh;
 `;
 
-export default class HomePage extends React.Component<RouteComponentProps> {
+export default class HomePage extends React.Component<
+  RouteComponentProps,
+  { buildings: any; symptoms: any }
+> {
   constructor(props) {
     super(props);
     this.handleToForm = this.handleToForm.bind(this);
@@ -41,6 +45,41 @@ export default class HomePage extends React.Component<RouteComponentProps> {
     });
   }
 
+  componentWillMount() {
+    this.setState({
+      buildings: {},
+      symptoms: {}
+    });
+  }
+
+  componentDidMount() {
+    axios
+      .post("/api/get_home_data", {
+        email: this.props.location.state.email
+      })
+      .then(res => {
+        var buildingnum = {};
+        for (var building in res.data["buildings"]) {
+          if (res.data["buildings"][building] in buildingnum) {
+            buildingnum[res.data["buildings"][building]].push(building);
+          } else {
+            buildingnum[res.data["buildings"][building]] = [building];
+          }
+        }
+        this.setState({ buildings: buildingnum });
+
+        var symptomnum = {};
+        for (var symptom in res.data["symptoms"]) {
+          if (res.data["symptoms"][symptom] in symptomnum) {
+            symptomnum[res.data["symptoms"][symptom]].push(symptom);
+          } else {
+            symptomnum[res.data["symptoms"][symptom]] = [symptom];
+          }
+        }
+        this.setState({ symptoms: symptomnum });
+      });
+  }
+
   render() {
     return (
       <>
@@ -52,8 +91,11 @@ export default class HomePage extends React.Component<RouteComponentProps> {
               {...this.props}
             ></FeelingSickCard>
             <RightWrapper>
-              <Hotspots {...this.props}></Hotspots>
-              <Recents {...this.props}></Recents>
+              <Hotspots
+                {...this.props}
+                buildings={this.state.buildings}
+              ></Hotspots>
+              <Recents {...this.props} symptoms={this.state.symptoms}></Recents>
             </RightWrapper>
           </Content>
         </Page>

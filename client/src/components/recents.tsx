@@ -37,32 +37,43 @@ const SymptomText = styled("p")`
   font-weight: bold;
 `;
 
-export default class Recents extends React.Component {
+export default class Recents extends React.Component<{ symptoms: any }> {
+  constructor(props) {
+    super(props);
+  }
+
+  renderRecents() {
+    var renderArr = [];
+    var numToRender = 8;
+    var numArry = [];
+    for (var num in this.props.symptoms) {
+      if (num in numArry) {
+        continue;
+      }
+      numArry.push(num);
+    }
+    numArry.sort();
+    while (numToRender >= 0) {
+      var max = numArry.pop();
+      var i = 0;
+      while (max in numArry && numToRender >= 0) {
+        renderArr.push(
+          <Symptom>
+            <SymptomText>{this.props.symptoms[max][i]}</SymptomText>
+          </Symptom>
+        );
+        i++;
+        numToRender--;
+      }
+    }
+    return renderArr;
+  }
   render() {
     return (
       <>
         <RecentWrapper>
           <RecentTitle>Recent Symptoms</RecentTitle>
-          <SymptomWrapper>
-            <Symptom>
-              <SymptomText>Cough</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Headache</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Nausea</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Rash</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Chills</SymptomText>
-            </Symptom>
-            <Symptom>
-              <SymptomText>Sneezing</SymptomText>
-            </Symptom>
-          </SymptomWrapper>
+          <SymptomWrapper>{this.renderRecents()}</SymptomWrapper>
         </RecentWrapper>
       </>
     );
