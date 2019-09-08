@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { RouteComponentProps } from "react-router-dom";
-import { SimpleSelect } from "react-selectize";
-import Axios from "axios";
-import { async } from "q";
+import Schooldropdown from "./schooldropdown";
+import axios from "axios";
 
 const Form = styled("form")`
   background: #f7a9a8;
@@ -71,42 +70,56 @@ const SectionTitle = styled("p")`
 
 var uclabuildings = require("./UCLABuildings.json");
 var upennbuildings = require("./UPennBuildings.json");
+var umdbuildings = require("./UMDBuildings.json");
 
 export default class SignupForm2 extends React.Component<
   RouteComponentProps,
-  { university: string; schools: any; buildings: any }
+  {
+    university: string;
+    B0: string;
+    B1: string;
+    B2: string;
+    B3: string;
+    B4: string;
+  }
 > {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderOptions = this.renderOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.renderSchools = this.renderSchools.bind(this);
+    this.buildingChange = this.buildingChange.bind(this);
+    this.buildingChange1 = this.buildingChange1.bind(this);
+    this.buildingChange2 = this.buildingChange2.bind(this);
+    this.buildingChange3 = this.buildingChange3.bind(this);
+    this.buildingChange4 = this.buildingChange4.bind(this);
   }
 
-  handleSubmit() {
-    this.props.history.push("/home");
+  handleSubmit(e) {
+    e.preventDefault();
+    var buildingstring = `${this.state.B0},${this.state.B1},${this.state.B2},${this.state.B3},${this.state.B4}`;
+    console.log(buildingstring.toString(), this.props.location.state.email);
+    axios
+      .post("/api/additional_info_form", {
+        email: this.props.location.state.email,
+        buildings: buildingstring.toString(),
+        school: this.state.university
+      })
+      .then(response => {
+        console.log(response.data["message"]);
+        if (response.data["status"] == true) {
+          this.props.history.push({
+            pathname: "/home",
+            state: { email: this.props.location.state.email }
+          });
+        }
+      });
   }
 
   componentWillMount() {
     this.setState({
-      university: "None",
-      schools: []
+      university: "University of Maryland"
     });
-  }
-
-  async componentDidMount() {
-    if (!this.state.schools) {
-      (async () => {
-        try {
-          this.setState({
-            schools: await this.getData()
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      })();
-    }
   }
 
   handleChange(e) {
@@ -116,32 +129,50 @@ export default class SignupForm2 extends React.Component<
   }
 
   renderOptions() {
-    var buildings = [];
-    if (this.state.university != "None") {
-      Axios.get("/api/additional_info_form").then(response => {
-        buildings = response.data[this.state.university];
-      });
-      return buildings.map(building => (
+    if (this.state.university === "University of California, Los Angeles") {
+      return uclabuildings["buildings"].map(building => (
+        <Option value={building}>{building}</Option>
+      ));
+    } else if (this.state.university === "University of Maryland") {
+      return umdbuildings["buildings"].map(building => (
+        <Option value={building}>{building}</Option>
+      ));
+    } else if (this.state.university === "University of Pennsylvania") {
+      return upennbuildings["buildings"].map(building => (
         <Option value={building}>{building}</Option>
       ));
     }
-    return buildings;
   }
 
-  getData = async () => {
-    const res = await Axios("/api/additional_info_form");
-    return await res.data;
-  };
+  buildingChange(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B0: e.target.value });
+    console.log(this.state);
+  }
 
-  renderSchools = async () => {
-    try {
-      const response = await Axios.get("/api/additional_info_form");
-      this.setState({ buildings: response.data });
-      console.log("response");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  buildingChange1(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B1: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange2(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B2: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange3(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B3: e.target.value });
+    console.log(this.state);
+  }
+
+  buildingChange4(e) {
+    console.log(e.target.dataset.val, e.target.value);
+    this.setState({ B4: e.target.value });
+    console.log(this.state);
+  }
 
   render() {
     return (
@@ -150,38 +181,24 @@ export default class SignupForm2 extends React.Component<
           <FormItems>
             <Section>
               <SectionTitle id="Uni">University/College</SectionTitle>
-              <Choose id="university" onChange={this.handleChange}>
-                <Option value="None">Choose a school</Option>
-                {this.state.schools ? (
-                  this.state.schools.map(school => (
-                    <Option value={school}>{school}</Option>
-                  ))
-                ) : (
-                  <Option value="None">LOADING</Option>
-                )}
-              </Choose>
+              <Schooldropdown funct={this.handleChange} />
             </Section>
             <Section>
               <SectionTitle>Top 5 most visited buildings</SectionTitle>
-              <Choose>
-                <Option value="None">---</Option>
-                {/* {this.renderOptions()} */}
+              <Choose data-val={0} onChange={this.buildingChange}>
+                {this.renderOptions()}
               </Choose>
-              <Choose>
-                <Option value="None">---</Option>
-                {/* {this.renderOptions()} */}
+              <Choose data-val={1} onChange={this.buildingChange1}>
+                {this.renderOptions()}
               </Choose>
-              <Choose>
-                <Option value="None">---</Option>
-                {/* {this.renderOptions()} */}
+              <Choose data-val={2} onChange={this.buildingChange2}>
+                {this.renderOptions()}
               </Choose>
-              <Choose>
-                <Option value="None">---</Option>
-                {/* {this.renderOptions()} */}
+              <Choose data-val={3} onChange={this.buildingChange3}>
+                {this.renderOptions()}
               </Choose>
-              <Choose>
-                <Option value="None">---</Option>
-                {/* {this.renderOptions()} */}
+              <Choose data-val={4} onChange={this.buildingChange4}>
+                {this.renderOptions()}
               </Choose>
             </Section>
 
