@@ -36,19 +36,21 @@ def make_buildings():
 
 def make_users():
     users = {
-        "Dhanvee Ivaturi": "dhanvee@umd.edu",
-        "Henry Trinh": "dhanvee@umd.edu",
-        "Nikolay Pomytkin": "pomytkin@umd.edu",
-        "Ryan Mao": "dhanvee@umd.edu",
-        "User One": "user1@test.com",
-        "User Two": "user2test.com",
-        "User Three": "user3@test.com",
-        "User Four": "user4@test.com",
-        "User Five": "user5@test.com"
+        "Dhanvee Ivaturi":  ("dhanvee@umd.edu", 2),
+        "Henry Trinh":      ("thenry3@g.ucla.edu", 1),
+        "Nikolay Pomytkin": ("pomytkin@umd.edu", 2),
+        "Ryan Mao":         ("rym15@scarletmail.rutgers.edu", 3),
+        "User One":         ("user1@test.com", 2),
+        "User Two":         ("user2test.com", 2),
+        "User Three":       ("user3@test.com", 2),
+        "User Four":        ("user4@test.com", 2),
+        "User Five":        ("user5@test.com", 2)
     }
 
     for name, email in users.items():
-        u = User(name = name, email = email, password = User.generate_hash('password'))
+        u = User(name = name, email = email[0], password = User.generate_hash('password'), school_id=email[1])
         db.session.add(u)
         db.session.commit()
+
+#==================================================================================
 
