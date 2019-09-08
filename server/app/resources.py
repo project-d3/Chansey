@@ -251,7 +251,9 @@ class TimeChartData(Resource):
                     day_reports[symptom][6] += 1
         return_list = []
         for key, value in day_reports.items():
+            value.reverse()
             return_list.append({'name':key.name, 'values':value})
+
         return return_list
 
 class UserChartsData(Resource):
