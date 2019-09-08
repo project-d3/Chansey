@@ -1,6 +1,7 @@
 from app import db
 from app.models import User, Building, School, Symptom, Report
 import json
+from datetime import datetime, timedelta
 
 #==================================================================================
 
@@ -61,7 +62,7 @@ def make_users():
 
       for bldg in email[2]:
         for b in Building.query.filter_by(name=bldg):
-    u.buildings.append(b)
+            u.buildings.append(b)
 
       db.session.add(u)
       db.session.commit()
@@ -92,6 +93,7 @@ def one_report(severity, email, days, symptoms):
     user = User.query.filter_by(email=email).first()
     user_id = user.id
 
+    days = datetime.today() - timedelta(days=days)
     new_report = Report(severity=severity, user_id=user_id, school_id=user.school.id, date=days)
     new_report.symptoms = []
     new_report.buildings = []
