@@ -55,13 +55,13 @@ export default class Recents extends React.Component {
               <SymptomText>Nausea</SymptomText>
             </Symptom>
             <Symptom>
-              <SymptomText>Stuffy Nose</SymptomText>
+              <SymptomText>Rash</SymptomText>
             </Symptom>
             <Symptom>
-              <SymptomText>Bloody Nose</SymptomText>
+              <SymptomText>Chills</SymptomText>
             </Symptom>
             <Symptom>
-              <SymptomText>Fever</SymptomText>
+              <SymptomText>Sneezing</SymptomText>
             </Symptom>
           </SymptomWrapper>
         </RecentWrapper>

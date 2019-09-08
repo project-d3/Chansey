@@ -164,7 +164,6 @@ class SubmitReport(Resource):
         new_report.symptoms = []
         new_report.buildings = []
         print(symptoms)
-        symptoms = symptoms.split(",")
         for symptom in symptoms:
             s = Symptom.query.filter_by(name=symptom).first()
             if s:
