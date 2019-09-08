@@ -110,7 +110,7 @@ class SymptomFormPage extends React.Component<
     return (
       <>
         <Page>
-          <TempNavBar />
+          <TempNavBar {...this.props} />
           <Content onSubmit={this.submitSymptoms}>
             <SymptomInsert funct={this.changeSymptoms} />
             <RightDiv>
