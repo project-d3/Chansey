@@ -4,6 +4,8 @@ from .models import User, Report, Symptom, Building, School
 from app import db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 from datetime import datetime, timedelta, date
+from . import notifier
+from random import choice
 
 ''' 
 START OF SECTION FOR CONSOLODATING POST REQUEST ARGUMENT PARSERS
@@ -169,10 +171,10 @@ class SubmitReport(Resource):
                 new_report.symptoms.append(s)
         for building in user.buildings:
             new_report.buildings.append(Building.query.filter_by(name=building.name).first())
+        notifier.notify("Try to avoid " + choice(user.buildings).name + "! There seems to be a lot of germs there...")
         try:
             db.session.add(new_report)
             db.session.commit()
-            notifier.notify("Try to avoid " + user.buildings[0] + "! There seems to be a lot of germs there...")
             return {
                 'message': 'Successfully created report for user {}'.format(new_report.user.email),
                 'status': True
