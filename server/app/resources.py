@@ -3,7 +3,7 @@ from app import api
 from .models import User, Report, Symptom, Building, School
 from app import db
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 ''' 
@@ -215,9 +215,30 @@ class HotspotSymptomsData(Resource):
             'buildings': buildings
         }
 
-class SchoolChartsData(Resource):
+class TimeChartData(Resource):
     def get(self):
-        return "test"
+        day_reports = {}
+        for symptom in Symptom.query.all():
+            day_reports[symptom] = [0 for i in range(0,7)]
+            for report in symptom.reports:
+                if report.date == date.today() - timedelta(days = 6):
+                    day_reports[symptom][0] += 1
+                elif report.date == date.today() - timedelta(days = 5):
+                    day_reports[symptom][1] += 1
+                elif report.date == date.today() - timedelta(days = 4):
+                    day_reports[symptom][2] += 1
+                elif report.date == date.today() - timedelta(days = 3):
+                    day_reports[symptom][3] += 1
+                elif report.date == date.today() - timedelta(days = 2):
+                    day_reports[symptom][4] += 1
+                elif report.date == date.today() - timedelta(days = 1):
+                    day_reports[symptom][5] += 1
+                elif report.date == date.today():
+                    day_reports[symptom][6] += 1
+        return_list = []
+        for key, value in day_reports.items():
+            return_list.append({'name':key.name, 'values':value})
+        return return_list
 
 class UserChartsData(Resource):
     def get(self):

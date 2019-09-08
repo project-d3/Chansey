@@ -23,9 +23,9 @@ api.add_resource(SubmitReport, '/api/submit_report')  # to submit a report
 # to get a dictionary with data necessary for home page
 api.add_resource(HotspotSymptomsData, '/api/get_home_data')
 # to get a dictionary with all the charts necessary for the charts page
-api.add_resource(SchoolChartsData, '/api/get_charts_data')
+api.add_resource(TimeChartData, '/api/get_charts_data')
 # to get a dictionary with all the charts necessary for the charts page
-api.add_resource(UserChartsData, '/api/get_charts_data')
+api.add_resource(UserChartsData, '/api/get_user_charts_data')
 
 # adding new schools or buildings (and symptoms if necessary?)
 api.add_resource(AddSchool, '/api/add_school')
