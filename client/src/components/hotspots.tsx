@@ -30,12 +30,13 @@ const Building = styled("div")`
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 2vh;
+  box-shadow: 2px 2px 3px 3px #c4c4c4;
 `;
 
 const BuildingText = styled("p")`
   font-family: "Quicksand", sans-serif;
   color: #c4a29e;
-  font-size: 1.8vw;
+  font-size: 1.4vw;
   margin: 10px 10px;
   font-weight: bold;
 `;

@@ -42,7 +42,7 @@ export default class InsertSymptomAge extends React.Component<{ funct: any }> {
         <AgeWrapper>
           <EnterAge
             type="text"
-            pattern="[0-9][0-9]?"
+            pattern="[0-9]*"
             id="counter"
             onChange={this.handleChange}
             maxlength="2"

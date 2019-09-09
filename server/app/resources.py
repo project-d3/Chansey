@@ -1,4 +1,3 @@
-import operator
 from flask_restful import Resource, reqparse
 from app import api
 from .models import User, Report, Symptom, Building, School
@@ -143,6 +142,7 @@ class SubmitReport(Resource):
         date = data['date'] # expected format for date: int
         email = data['email']
         symptoms = data['symptoms']
+        symptoms = symptoms.split(',')
         # converting raw data into variables to instantiate Report
         user = User.query.filter_by(email=email).first()
         if not user:
@@ -170,6 +170,8 @@ class SubmitReport(Resource):
             s = Symptom.query.filter_by(name=symptom).first()
             if s:
                 new_report.symptoms.append(s)
+            else:
+                print(symptom)
         for building in user.buildings:
             new_report.buildings.append(Building.query.filter_by(name=building.name).first())
         notifier.notify("Try to avoid " + choice(user.buildings).name + "! There seems to be a lot of germs there...")
@@ -222,7 +224,7 @@ class HotspotSymptomsData(Resource):
             if Building.query.filter_by(name=key).first():
                 if Building.query.filter_by(name=key).first().school_id == user.school_id:
                     user_buildings[key] = value
-        print(user_buildings)
+
         return {
             'school': school,
             'symptoms': sorted_symptoms,
@@ -235,6 +237,7 @@ class TimeChartData(Resource):
         for symptom in Symptom.query.all():
             day_reports[symptom] = [0 for i in range(0,7)]
             for report in symptom.reports:
+                print(report.date == date.today() - timedelta(days = 6))
                 if report.date == date.today() - timedelta(days = 6):
                     day_reports[symptom][0] += 1
                 elif report.date == date.today() - timedelta(days = 5):
@@ -251,9 +254,8 @@ class TimeChartData(Resource):
                     day_reports[symptom][6] += 1
         return_list = []
         for key, value in day_reports.items():
-            value.reverse()
             return_list.append({'name':key.name, 'values':value})
-
+        print(return_list)
         return return_list
 
 class UserChartsData(Resource):
