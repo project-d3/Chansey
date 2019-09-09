@@ -3,6 +3,17 @@ import styled from "styled-components";
 import NavBar from "../components/navbar";
 import ChanseyPIC from "../components/chansey.png";
 import Typing from "react-typing-animation";
+import { keyframes } from "styled-components";
+
+const animations = keyframes`
+from {
+  opacity: 0;
+}
+
+to {
+  opacity: 1;
+}
+`;
 
 const Page = styled("div")`
   width: 100%;
@@ -21,6 +32,8 @@ const ChanseyDiv = styled("div")`
   position: absolute;
   top: 20vh;
   left: 3vw;
+  animation: ${animations} 5s both;
+  animation-delay: 0.5s;
 `;
 
 const SloganDiv = styled("div")`

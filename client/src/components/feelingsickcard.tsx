@@ -14,6 +14,7 @@ const Card = styled("div")`
   margin-left: 5vw;
   margin-top: 3vh;
   border-radius: 20px;
+  box-shadow: 3px 3px 6px 6px #c4c4c4;
 `;
 
 const Message = styled("p")`

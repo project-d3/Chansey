@@ -38,7 +38,7 @@ class Line extends Component {
             label: function(item, data) {
               return (
                 " " +
-                data.labels[item.index] +
+                this.state.symptoms_array[item.index] +
                 ": " +
                 data.datasets[item.datasetIndex].data[item.index]
               );
@@ -70,7 +70,7 @@ class Line extends Component {
           JSON.stringify(nextProps.symptoms_array[i])
       ) {
         this.setState({ symptoms_array: nextProps.symptoms_array });
-        setTimeout(this.update_chart, 3000);
+        setTimeout(this.update_chart, 5000);
         return;
       }
     }
